@@ -33,12 +33,17 @@ El sistema debe permitir a nuevos usuarios registrarse mediante formulario o aut
 - Contraseña  
 - Credenciales de Google  
 
+**Condiciones** 
+- La logitud minima de contraseña debe ser de 8 caracteres
+- El correo electrónico debe semanticamente validado
+
 **Procesamiento:**  
 El sistema validará los datos ingresados y creará una nueva cuenta de usuario.
 
 **Salidas:**  
 - Confirmación de registro exitoso  
 - Mensaje de error si los datos son inválidos o el usuario ya existe  
+
 
 ---
 
@@ -68,6 +73,7 @@ El sistema debe permitir al usuario añadir prendas a su armario utilizando la c
 
 **Entradas:**  
 - Imagen capturada por la cámara  
+- Categoria selecccionada por el usuario(legs, feet, chest, head)
 
 **Procesamiento:**  
 El sistema procesará la imagen y almacenará la prenda en el armario del usuario.
