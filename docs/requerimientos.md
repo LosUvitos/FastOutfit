@@ -72,7 +72,7 @@ El sistema generará una combinación de prendas basada en criterios definidos.
 El sistema debe permitir al usuario añadir prendas a su armario utilizando la cámara del dispositivo.
 
 **Entradas:**  
-- Imagen capturada por la cámara  
+- Imagen capturada por la cámara traida desde la galería
 - Categoria selecccionada por el usuario(legs, feet, chest, head)
 
 **Procesamiento:**  
@@ -82,6 +82,75 @@ El sistema procesará la imagen y almacenará la prenda en el armario del usuari
 - Confirmación de prenda añadida  
 - Visualización de la prenda en el armario  
 ---
+### **RF-05: Visualización del armario**
+**Descripción:**
+El sistema debe permitir al usuario visualizar todas las prendas registradas en su armario digital.
+
+**Entradas:**
+- Peticion de el usuario a través de entrar a la seccion de armario
+
+**Procesamiento:**
+- El sistema recupera las prendas almacenadas
+
+**Salidas:**
+- Lista visual de prendas
+
+### **RF-06: Edición de prendas**
+---
+**Descripción:**
+El sistema debe permitir modificar la información de una prenda registrada.
+
+**Entradas:**
+ - Peticion del usuario para modificar prenda
+
+**Salidas:**
+ - Campos a ser modficados (categoria, nombre)
+---
+### **RF-07: Eliminación de prendas**
+
+**Descripción:**
+El sistema debe permitir eliminar prendas del armario.
+
+
+**Entradas:**
+ - Peticion del usuario para eliminar la prenda
+
+**Procesamiento:**
+- El sistema elimina la prenda del armario.
+
+**Salidas:**
+ - Mensaje de exito al eliminar la prenda
+
+---
+### **RF-08: Guardado de outfits**
+
+**Descripción:**
+El sistema debe permitir guardar outfits generados como favoritos.
+
+---
+### **RF-9: Generación manual de outfits**
+
+**Descripción:**
+El usuario puede crear combinaciones de prendas para crear un nuevo outfit
+
+**Salidas**
+ - El outfit queda guardado en la seccion de outfit
+
+---
+
+### **RF-10: Cierre de sesión**
+
+**Descripción:**
+El usuario debe poder cerrar sesión
+
+**Entradas:**
+ - El usuario selecciona la opcion de cerrar sesión
+
+**Procesamiento:**
+ - Se borran las credenciales de inicio de sesión
+
+**Salida:**
+ - El usuario es redirigido a la vista de inicio de sesión
 # 3.2 Requerimientos No Funcionales
 
 ## Usabilidad
