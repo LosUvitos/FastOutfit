@@ -1,0 +1,122 @@
+# ============================================================
+# IDEs
+# ============================================================
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+.idea/caches
+.idea/modules.xml
+.idea/navEditor.xml
+.idea/deploymentTargetDropDown.xml
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# NetBeans
+nbproject/
+nbbuild/
+nbdist/
+nb-configuration.xml
+
+
+# ============================================================
+# Sistemas operativos
+# ============================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.directory
+.Trash-*
+
+
+# ============================================================
+# Archivos basura generales
+# ============================================================
+
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig
+*.rej
+*.patch
+*.diff
+.cache/
+tmp/
+temp/
+
+
+# ============================================================
+# Kotlin / Android
+# ============================================================
+
+# Build
+build/
+*/build/
+.gradle/
+local.properties
+
+# Archivos generados
+*.class
+*.dex
+*.ap_
+*.apk
+*.aab
+*.aar
+
+# Keystore (nunca subir al repositorio)
+*.jks
+*.keystore
+*.p12
+*.pfx
+
+# Archivos de configuración local sensibles
+google-services.json
+google-services-dev.json
+secrets.properties
+local.defaults.properties
+
+# Proguard
+proguard/
+*.pro.bak
+
+# Capturas y reportes de pruebas
+screenshots/
+test-results/
+lint-results*
+lint-report*
