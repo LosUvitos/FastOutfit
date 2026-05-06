@@ -1,4 +1,4 @@
-package com.fastoutfit.ui.components
+package com.uvitos.fastoutfit.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fastoutfit.ui.theme.*
+import com.uvitos.fastoutfit.ui.theme.*
 
 /**
  * Full-screen dark navy background.
@@ -76,6 +76,16 @@ fun OutfitTextField(
     )
 }
 
+object Routes {
+    const val SPLASH   = "splash"
+    const val LOGIN    = "login"
+    const val REGISTER = "register"
+    const val HOME     = "home"
+    const val SHIRTS   = "shirts"
+    const val ADD_ITEM = "add_item"
+    const val SETTINGS = "settings"
+}
+
 /** Gold pill button */
 @Composable
 fun GoldButton(
@@ -100,7 +110,6 @@ fun GoldButton(
         )
     }
 }
-
 /** Top app bar with home icon (gold) and profile circle */
 @Composable
 fun FastOutfitTopBar(

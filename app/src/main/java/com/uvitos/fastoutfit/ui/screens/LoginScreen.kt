@@ -20,8 +20,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fastoutfit.ui.components.*
-import com.fastoutfit.ui.theme.*
+import com.uvitos.fastoutfit.ui.components.*
+import com.uvitos.fastoutfit.ui.theme.*
 
 /**
  * LoginScreen
@@ -86,7 +86,7 @@ fun LoginScreen(
 
             // ── Fields ────────────────────────────────────────────────────
             OutfitTextField(
-                value = value,
+                value = "value",
                 onValueChange = { name = it },
                 placeholder = "name",
             )
@@ -157,7 +157,7 @@ fun BoltLogo(size: Int = 120) {
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     // Bolt icon — replace with your drawable
-                    BoltShape(color = Color(0xFF1A1A1A))
+                    //BoltShape(color = Color(0xFF1A1A1A))
                 }
             }
         }
