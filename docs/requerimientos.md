@@ -1,157 +1,230 @@
-# 📄 3. Requerimientos específicos
+# 📄 Requerimientos específicos
 
-## 3.1 Requerimientos funcionales
+## Requerimientos funcionales
 
-### **RF-01: Autenticación de usuario**
-**Descripción:**  
-El sistema debe permitir a los usuarios iniciar sesión mediante correo electrónico y contraseña, o mediante autenticación con Google.
+### RF-01: Inicio de sesión
+Descripción:
+El sistema debe permitir a los usuarios autenticarse mediante correo electrónico y contraseña.
+Entradas:
 
-**Entradas:**  
-- Correo electrónico  
-- Contraseña  
-- Credenciales de Google  
+Correo electrónico
+Contraseña
 
-**Procesamiento:**  
-El sistema validará las credenciales ingresadas contra el servicio de autenticación correspondiente.
+Procesamiento:
+El sistema valida que los campos no estén vacíos y que las credenciales correspondan a una cuenta registrada.
 
-**Salidas:**  
-- Acceso al sistema si las credenciales son válidas  
-- Mensaje de error en caso contrario  
+Salidas:
+Acceso a la pantalla principal si las credenciales son válidas
+Mensaje de error descriptivo si las credenciales son incorrectas o los campos están vacíos
 
-**Postcondición:**  
-La sesión del usuario debe permanecer almacenada en el dispositivo móvil, evitando solicitar credenciales nuevamente en futuros accesos.
-
----
-
-### **RF-02: Registro de usuario**
-**Descripción:**  
-El sistema debe permitir a nuevos usuarios registrarse mediante formulario o autenticación con Google.
-
-**Entradas:**  
-- Nombre  
-- Correo electrónico  
-- Contraseña  
-- Credenciales de Google  
-
-**Condiciones** 
-- La logitud minima de contraseña debe ser de 8 caracteres
-- El correo electrónico debe semanticamente validado
-
-**Procesamiento:**  
-El sistema validará los datos ingresados y creará una nueva cuenta de usuario.
-
-**Salidas:**  
-- Confirmación de registro exitoso  
-- Mensaje de error si los datos son inválidos o el usuario ya existe  
+Condiciones:
+La sesión debe permanecer activa en el dispositivo hasta que el usuario cierre sesión explícitamente
 
 
----
+### RF-02: Registro de usuario
+Descripción:
+El sistema debe permitir a nuevos usuarios crear una cuenta mediante formulario.
+Entradas:
 
-### **RF-03: Recomendación de outfits**
-**Descripción:**  
-El sistema debe recomendar al usuario combinaciones de ropa.
+Nombre
+Correo electrónico
+Contraseña
 
-**Entradas:**  
-- Datos del usuario  
-- Prendas registradas en el armario  
+Procesamiento:
+El sistema valida que el correo tenga formato válido (usuario@dominio.extensión), que la contraseña tenga mínimo 8 caracteres y que el correo no esté registrado previamente. Si todo es válido, crea la cuenta.
+Salidas:
 
-**Procesamiento:**  
-El sistema generará una combinación de prendas basada en criterios definidos.
+Confirmación de registro exitoso y acceso a la pantalla principal
+Mensaje de error si algún dato es inválido o el correo ya existe
 
-**Salidas:**  
-- Outfit recomendado  
 
-**Condiciones:**  
-- La recomendación debe generarse automáticamente una vez al día  
-- El usuario también podrá solicitar recomendaciones manualmente en cualquier momento  
+### RF-03: Cierre de sesión
+Descripción:
+El sistema debe permitir al usuario finalizar su sesión activa.
 
----
+Entradas:
+Selección de la opción "Cerrar sesión" por parte del usuario
 
-### **RF-04: Gestión de prendas mediante cámara**
-**Descripción:**  
-El sistema debe permitir al usuario añadir prendas a su armario utilizando la cámara del dispositivo.
+Procesamiento:
+El sistema finaliza la sesión activa y elimina los datos de autenticación almacenados en el dispositivo.
+Salidas:
 
-**Entradas:**  
-- Imagen capturada por la cámara traida desde la galería
-- Categoria selecccionada por el usuario(legs, feet, chest, head)
+Redirección a la pantalla de inicio de sesión
 
-**Procesamiento:**  
-El sistema procesará la imagen y almacenará la prenda en el armario del usuario.
 
-**Salidas:**  
-- Confirmación de prenda añadida  
-- Visualización de la prenda en el armario  
----
-### **RF-05: Visualización del armario**
-**Descripción:**
+### RF-04: Edición de perfil
+Descripción:
+El sistema debe permitir al usuario visualizar y modificar la información básica de su perfil.
+
+Entradas:
+Nombre actualizado
+Foto de perfil (cámara o galería)
+
+Procesamiento:
+El sistema valida que el nombre no esté vacío, actualiza los datos del perfil y, si se proporcionó una nueva foto, la procesa y almacena reemplazando la anterior.
+Salidas:
+
+Confirmación de perfil actualizado exitosamente
+Los nuevos datos se reflejan en la interfaz del usuario
+
+
+### RF-05: Agregar prenda
+Descripción:
+El sistema debe permitir al usuario añadir prendas a su armario digital mediante fotografía tomada con la cámara del dispositivo o seleccionada desde la galería.
+
+Entradas:
+Imagen de la prenda (cámara o galería)
+Categoría seleccionada por el usuario (superior, inferior, calzado, accesorio)
+Color principal de la prenda
+Nombre de la prenda (opcional)
+
+Procesamiento:
+El sistema procesa y comprime la imagen, asocia los atributos ingresados y almacena la prenda en el armario del usuario.
+
+Salidas:
+Confirmación de prenda añadida exitosamente
+La prenda queda visible en el armario del usuario
+
+
+### RF-06: Visualización del armario
+Descripción:
 El sistema debe permitir al usuario visualizar todas las prendas registradas en su armario digital.
 
-**Entradas:**
-- Peticion de el usuario a través de entrar a la seccion de armario
+Entradas:
+Acceso del usuario a la sección de armario
 
-**Procesamiento:**
-- El sistema recupera las prendas almacenadas
+Procesamiento:
+El sistema recupera y muestra todas las prendas almacenadas del usuario, organizadas por categoría.
 
-**Salidas:**
-- Lista visual de prendas
-
-### **RF-06: Edición de prendas**
----
-**Descripción:**
-El sistema debe permitir modificar la información de una prenda registrada.
-
-**Entradas:**
- - Peticion del usuario para modificar prenda
-
-**Salidas:**
- - Campos a ser modficados (categoria, nombre)
----
-### **RF-07: Eliminación de prendas**
-
-**Descripción:**
-El sistema debe permitir eliminar prendas del armario.
+Salidas:
+Vista en cuadrícula con las imágenes de las prendas registradas
+Mensaje informativo si el armario está vacío
 
 
-**Entradas:**
- - Peticion del usuario para eliminar la prenda
+### RF-07: Filtrado de prendas
+Descripción:
+El sistema debe permitir al usuario filtrar las prendas de su armario según criterios específicos.
 
-**Procesamiento:**
-- El sistema elimina la prenda del armario.
+Entradas:
+Criterio de filtrado seleccionado por el usuario (categoría, color)
 
-**Salidas:**
- - Mensaje de exito al eliminar la prenda
+Procesamiento:
+El sistema recupera únicamente las prendas que correspondan al criterio seleccionado y actualiza la vista del armario.
 
----
-### **RF-08: Guardado de outfits**
+Salidas:
+Vista filtrada con las prendas que coinciden con el criterio seleccionado
+Mensaje informativo si no hay prendas que coincidan con el filtro aplicado
 
-**Descripción:**
-El sistema debe permitir guardar outfits generados como favoritos.
 
----
-### **RF-9: Generación manual de outfits**
+### RF-08: Edición de prendas
+Descripción:
+El sistema debe permitir al usuario modificar la información de una prenda registrada.
 
-**Descripción:**
-El usuario puede crear combinaciones de prendas para crear un nuevo outfit
+Entradas:
+Selección de una prenda existente
+Nuevos valores para los campos editables (nombre, categoría, color)
 
-**Salidas**
- - El outfit queda guardado en la seccion de outfit
+Procesamiento:
+El sistema actualiza los datos de la prenda con los nuevos valores ingresados.
 
----
+Salidas:
+Confirmación de cambios guardados exitosamente
+La prenda refleja la información actualizada en el armario
 
-### **RF-10: Cierre de sesión**
 
-**Descripción:**
-El usuario debe poder cerrar sesión
+### RF-09: Eliminación de prendas
+Descripción:
+El sistema debe permitir al usuario eliminar prendas de su armario.
 
-**Entradas:**
- - El usuario selecciona la opcion de cerrar sesión
+Entradas:
+Selección de la prenda a eliminar
+Confirmación explícita del usuario mediante mensaje de advertencia
 
-**Procesamiento:**
- - Se borran las credenciales de inicio de sesión
+Procesamiento:
+Tras la confirmación, el sistema elimina la prenda del armario y la desvincula de los outfits guardados que la contenían.
 
-**Salida:**
- - El usuario es redirigido a la vista de inicio de sesión
-# 3.2 Requerimientos No Funcionales
+Salidas:
+Mensaje de confirmación de eliminación exitosa
+La prenda deja de aparecer en el armario y en los outfits asociados
+
+
+### RF-10: Recomendación automática de outfits
+Descripción:
+El sistema debe generar automáticamente una sugerencia de outfit diario combinando prendas del armario del usuario.
+Entradas:
+
+Prendas registradas en el armario del usuario
+Solicitud manual del usuario o apertura diaria de la aplicación
+
+Procesamiento:
+El sistema selecciona una combinación de prendas de distintas categorías siguiendo criterios de compatibilidad por color y categoría. La recomendación automática se genera una vez por día; el usuario puede solicitar una nueva manualmente en cualquier momento.
+
+Salidas:
+Outfit recomendado con visualización de las prendas seleccionadas
+Mensaje informativo si el armario no tiene prendas suficientes para generar una combinación
+
+
+### RF-11: Creación manual de outfits
+Descripción:
+El sistema debe permitir al usuario construir un outfit eligiendo manualmente prendas de su armario.
+
+Entradas:
+Selección de una o más prendas del armario
+Nombre del outfit (opcional)
+
+Procesamiento:
+El sistema combina las prendas seleccionadas y guarda el outfit en la sección correspondiente.
+
+Salidas:
+El outfit queda guardado y visible en la sección de outfits del usuario
+
+
+### RF-12: Guardado de outfits favoritos
+Descripción:
+El sistema debe permitir al usuario marcar outfits generados como favoritos para acceder a ellos fácilmente.
+
+Entradas:
+Selección de la opción "Guardar como favorito" sobre un outfit recomendado
+
+Procesamiento:
+El sistema registra el outfit como favorito y lo almacena en la sección de outfits del usuario.
+
+Salidas:
+Confirmación de outfit guardado
+El outfit aparece en la sección de outfits favoritos
+
+
+### RF-13: Historial de outfits usados
+Descripción:
+El sistema debe permitir al usuario registrar qué outfit utilizó en un día determinado.
+
+Entradas:
+Selección de la opción "Usar hoy" sobre un outfit
+Fecha del registro (tomada automáticamente del dispositivo)
+
+Procesamiento:
+El sistema asocia el outfit seleccionado a la fecha actual y lo registra en el historial del usuario. Si ya existe un outfit registrado para ese día, el nuevo reemplaza al anterior.
+
+Salidas:
+Confirmación de registro exitoso
+El outfit queda visible en el historial con su fecha correspondiente
+
+
+### RF-14: Notificación de outfit del día
+Descripción:
+El sistema debe enviar una notificación local diaria al usuario recordándole consultar el outfit recomendado para ese día.
+
+Entradas:
+Configuración de notificaciones activada por el usuario
+
+Procesamiento:
+El sistema programa una notificación local para ser enviada una vez al día en un horario fijo. La notificación se genera únicamente si el usuario ha concedido los permisos correspondientes.
+
+Salidas:
+Notificación visible en el panel de notificaciones del dispositivo
+Al seleccionar la notificación, el usuario es dirigido directamente a la sección de recomendación de outfits
+
+# Requerimientos No Funcionales
 
 ## Usabilidad
 
