@@ -8,6 +8,7 @@ import com.fastoutfit.ui.screens.SplashScreen
 import com.uvitos.fastoutfit.ui.components.Routes
 import com.uvitos.fastoutfit.ui.screens.LoginScreen
 import com.uvitos.fastoutfit.ui.screens.HomeScreen
+import com.uvitos.fastoutfit.ui.screens.RegisterScreen
 
 @Composable
 fun FastOutfitNavGraph()
@@ -38,6 +39,10 @@ fun FastOutfitNavGraph()
                     onAddGarmentClick = { /* TODO: Navigate to add garment */ },
                     onWardrobeClick = { /* TODO: Navigate to wardrobe */ }
                 )
+        }
+
+        composable(Routes.REGISTER) {
+            RegisterScreen()
         }
     }
 }

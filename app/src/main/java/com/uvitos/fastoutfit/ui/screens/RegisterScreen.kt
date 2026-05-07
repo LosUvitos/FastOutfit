@@ -30,22 +30,26 @@ import com.uvitos.fastoutfit.ui.theme.*
  *   ┌─────────────────────────┐
  *   │  [Bolt logo]            │
  *   │  FAST OUTFIT            │
- *   │  LOGIN                  │
+ *   │  REGISTER               │
+ *   │  [E-mail field]         │
  *   │  [Name field]           │
  *   │  [Password field]       │
- *   │  [LOG IN button]        │
- *   │  I DONT HAVE AN ACCOUNT │
- *   │  I FORGOT MY PASSWORD   │
+ *   │  [confirm P-word field] │
+ *   │  I HAVE AN ACCOUNT      │
  *   └─────────────────────────┘
  */
 @Composable
-fun LoginScreen(
-    onLoginClick: (name: String, password: String) -> Unit = { _, _ -> },
-    onRegisterClick: () -> Unit = {},
-    onForgotPasswordClick: () -> Unit = {},
+fun RegisterScreen(
+    /* onLoginClick: () -> Unit = {},*/
+    onRegisterClick: (email: String, name: String, verify: Boolean) -> Unit = { _, _, _ ->},
+    /*onForgotPasswordClick: () -> Unit = {},*/
 ) {
+
+    var email    by remember { mutableStateOf("") }
     var name     by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var password2 by remember { mutableStateOf("") }
+    var matchPasswords by remember { mutableStateOf(false) }
 
     AppBackground {
         Column(
@@ -57,7 +61,7 @@ fun LoginScreen(
             Spacer(Modifier.height(60.dp))
 
             // ── Logo ──────────────────────────────────────────────────────
-            BoltLogo()
+            BoltLogo2()
 
             Spacer(Modifier.height(20.dp))
 
@@ -75,7 +79,7 @@ fun LoginScreen(
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = "LOGIN",
+                text = "REGISTER",
                 color = TextPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
@@ -85,6 +89,14 @@ fun LoginScreen(
             Spacer(Modifier.height(32.dp))
 
             // ── Fields ────────────────────────────────────────────────────
+            OutfitTextField(
+                value = email,
+                onValueChange = { email = it },
+                placeholder = "e-mail",
+            )
+
+            Spacer(Modifier.height(12.dp))
+
             OutfitTextField(
                 value = name,
                 onValueChange = { name = it },
@@ -100,22 +112,49 @@ fun LoginScreen(
                 isPassword = true,
             )
 
+            Spacer(Modifier.height(12.dp))
+            var showtext by remember { mutableStateOf(false) }
+            OutfitTextField(
+                value = password2,
+                onValueChange ={ newValue ->
+                    password2 = newValue
+                    matchPasswords = password == newValue
+
+                    showtext = true
+                },
+                placeholder = "Confirm Password",
+                isPassword = true,
+
+            )
+            if (!matchPasswords and showtext) {
+                Text(
+                    text = "passwords dont match",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                )
+            }
+
             Spacer(Modifier.height(40.dp))
 
-            // ── Login button ──────────────────────────────────────────────
+            // ── Register button ──────────────────────────────────────────────
             GoldButton(
                 text = "LOG IN",
-                onClick = { onLoginClick(name, password) },
+                onClick = { onRegisterClick(email, name, verify(password, password2)) },
             )
 
             Spacer(Modifier.height(24.dp))
 
             // ── Bottom links ──────────────────────────────────────────────
-            LinkText(text = "I DONT HAVE AN ACCOUNT", onClick = onRegisterClick)
+            LinkText(text = "I HAVE AN ACCOUNT", onClick = { /* TODO: Navigate to settings */ })
             Spacer(Modifier.height(8.dp))
-            LinkText(text = "I FORGOT MY PASSWORD", onClick = onForgotPasswordClick)
+
         }
     }
+}
+
+fun verify(k1: String,k2: String): Boolean{
+    return k1 == k2
 }
 
 @Composable
@@ -134,7 +173,7 @@ private fun LinkText(text: String, onClick: () -> Unit) {
 
 /** Shared metallic bolt logo used on Login & Register screens */
 @Composable
-fun BoltLogo(size: Int = 120) {
+fun BoltLogo2(size: Int = 120) {
     // Outer metallic ring
     Surface(
         modifier = Modifier.size(size.dp),
