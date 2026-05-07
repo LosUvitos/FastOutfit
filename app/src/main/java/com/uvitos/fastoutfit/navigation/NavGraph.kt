@@ -23,10 +23,8 @@ fun FastOutfitNavGraph()
                 onRegisterClick = {navController.navigate(Routes.REGISTER)}
                 )
         }
-<<<<<<< HEAD
         composable (Routes.SPLASH) {
             SplashScreen(onFinished = {navController.navigate(Routes.LOGIN)})
-=======
 
         composable(Routes.HOME) {
                 HomeScreen(
@@ -38,7 +36,6 @@ fun FastOutfitNavGraph()
                     onAddGarmentClick = { /* TODO: Navigate to add garment */ },
                     onWardrobeClick = { /* TODO: Navigate to wardrobe */ }
                 )
->>>>>>> ae6822f (fix: Fixed navGraph)
         }
     }
 }
