@@ -24,7 +24,8 @@ fun FastOutfitNavGraph()
                 )
         }
         composable (Routes.SPLASH) {
-            SplashScreen(onFinished = {navController.navigate(Routes.LOGIN)})
+            SplashScreen(onFinished = { navController.navigate(Routes.LOGIN) })
+        }
 
         composable(Routes.HOME) {
                 HomeScreen(
