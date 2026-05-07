@@ -8,6 +8,7 @@ import com.fastoutfit.ui.screens.SplashScreen
 import com.uvitos.fastoutfit.ui.components.Routes
 import com.uvitos.fastoutfit.ui.screens.LoginScreen
 import com.uvitos.fastoutfit.ui.screens.HomeScreen
+import com.uvitos.fastoutfit.ui.screens.RegisterScreen
 import com.uvitos.fastoutfit.ui.screens.SettingsScreen
 
 @Composable
@@ -41,6 +42,9 @@ fun FastOutfitNavGraph()
                 )
         }
 
+        composable(Routes.REGISTER) {
+            RegisterScreen()
+        }
         composable(Routes.SETTINGS) { SettingsScreen() }
     }
 }
