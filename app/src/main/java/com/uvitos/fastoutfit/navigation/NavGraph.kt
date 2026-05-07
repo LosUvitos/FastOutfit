@@ -28,7 +28,7 @@ fun FastOutfitNavGraph()
             SplashScreen(onFinished = {navController.navigate(Routes.LOGIN)})
 =======
 
-        composable(Routes.Home) {
+        composable(Routes.HOME) {
                 HomeScreen(
                     userName = "USUARIO",
                     onSettingsClick = { /* TODO: Navigate to settings */ },
