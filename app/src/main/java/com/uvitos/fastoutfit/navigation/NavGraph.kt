@@ -9,6 +9,7 @@ import com.uvitos.fastoutfit.ui.components.Routes
 import com.uvitos.fastoutfit.ui.screens.LoginScreen
 import com.uvitos.fastoutfit.ui.screens.HomeScreen
 import com.uvitos.fastoutfit.ui.screens.RegisterScreen
+import com.uvitos.fastoutfit.ui.screens.SettingsScreen
 
 @Composable
 fun FastOutfitNavGraph()
@@ -32,7 +33,7 @@ fun FastOutfitNavGraph()
         composable(Routes.HOME) {
                 HomeScreen(
                     userName = "USUARIO",
-                    onSettingsClick = { /* TODO: Navigate to settings */ },
+                    onSettingsClick = { navController.navigate(Routes.SETTINGS) },
                     onProfileClick = { /* TODO: Navigate to profile */ },
                     onShuffleClick = { /* TODO: Generate new outfit */ },
                     onFavoriteClick = { /* TODO: Save outfit to favorites */ },
@@ -44,5 +45,6 @@ fun FastOutfitNavGraph()
         composable(Routes.REGISTER) {
             RegisterScreen()
         }
+        composable(Routes.SETTINGS) { SettingsScreen() }
     }
 }
