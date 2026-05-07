@@ -23,7 +23,7 @@ fun FastOutfitNavGraph()
                 )
         }
 
-        composable(Routes.Home) {
+        composable(Routes.HOME) {
                 HomeScreen(
                     userName = "USUARIO",
                     onSettingsClick = { /* TODO: Navigate to settings */ },
