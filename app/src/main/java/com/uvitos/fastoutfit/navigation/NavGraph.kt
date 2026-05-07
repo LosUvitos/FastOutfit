@@ -23,6 +23,7 @@ fun FastOutfitNavGraph()
                 onRegisterClick = {navController.navigate(Routes.REGISTER)}
                 )
         }
+
         composable (Routes.SPLASH) {
             SplashScreen(onFinished = { navController.navigate(Routes.LOGIN) })
         }
