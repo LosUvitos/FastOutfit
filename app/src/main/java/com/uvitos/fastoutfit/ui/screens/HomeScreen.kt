@@ -1,6 +1,7 @@
 package com.uvitos.fastoutfit.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,11 +19,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.uvitos.fastoutfit.R
+import com.uvitos.fastoutfit.ui.components.AppBackground
 import com.uvitos.fastoutfit.ui.components.BottomNavigationComponent
 import com.uvitos.fastoutfit.ui.components.FloatingActionButtonComponent
 import com.uvitos.fastoutfit.ui.components.OutfitCardComponent
 import com.uvitos.fastoutfit.ui.components.TopBarComponent
 import com.uvitos.fastoutfit.ui.components.WelcomeHeaderComponent
+import com.uvitos.fastoutfit.ui.theme.AzulOscuro
 
 @Composable
 fun HomeScreen(
@@ -35,64 +38,60 @@ fun HomeScreen(
     onAddGarmentClick: () -> Unit = {},
     onWardrobeClick: () -> Unit = {}
 ) {
-    Scaffold(
-        modifier = modifier.systemBarsPadding(),
-        containerColor = androidx.compose.ui.graphics.Color.Transparent
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.background),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-
-            Column(
+    AppBackground() {
+        Scaffold(
+            modifier = modifier.systemBarsPadding(),
+            containerColor = androidx.compose.ui.graphics.Color.Transparent
+        ) { paddingValues ->
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.SpaceBetween
+                    .padding(paddingValues)
             ) {
-                Column {
-                    TopBarComponent(
-                        onSettingsClick = onSettingsClick,
-                        onProfileClick = onProfileClick
-                    )
 
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    WelcomeHeaderComponent(userName = userName)
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    OutfitCardComponent(
-                        onShuffleClick = onShuffleClick,
-                        onFavoriteClick = onFavoriteClick
-                    )
-                }
-
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(bottom = 24.dp)
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    BottomNavigationComponent(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .wrapContentHeight(),
-                        onWardrobeClick = onWardrobeClick
-                    )
+                    Column {
+                        TopBarComponent(
+                            onSettingsClick = onSettingsClick,
+                            onProfileClick = onProfileClick
+                        )
 
-                    FloatingActionButtonComponent(
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        WelcomeHeaderComponent(userName = userName)
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        OutfitCardComponent(
+                            onShuffleClick = onShuffleClick,
+                            onFavoriteClick = onFavoriteClick
+                        )
+                    }
+
+                    Box(
                         modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(end = 8.dp, bottom = 8.dp),
-                        onClick = onAddGarmentClick
-                    )
+                            .fillMaxSize()
+                            .padding(bottom = 24.dp)
+                    ) {
+                        BottomNavigationComponent(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .wrapContentHeight(),
+                            onWardrobeClick = onWardrobeClick
+                        )
+
+                        FloatingActionButtonComponent(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(end = 8.dp, bottom = 8.dp),
+                            onClick = onAddGarmentClick
+                        )
+                    }
                 }
             }
         }

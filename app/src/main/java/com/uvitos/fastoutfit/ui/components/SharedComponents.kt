@@ -1,5 +1,6 @@
 package com.uvitos.fastoutfit.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -14,13 +15,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.uvitos.fastoutfit.R
 import com.uvitos.fastoutfit.ui.theme.*
 
 /**
@@ -31,10 +37,16 @@ import com.uvitos.fastoutfit.ui.theme.*
  */
 @Composable
 fun AppBackground(modifier: Modifier = Modifier, content: @Composable BoxScope.() -> Unit) {
+    Image(
+        painter = painterResource(R.drawable.background),
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.Crop
+    )
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(BackgroundDark),
+            .background(Color(0x00FFFFFF)),
         content = content
     )
 }
