@@ -40,7 +40,7 @@ import com.uvitos.fastoutfit.ui.theme.*
  */
 @Composable
 fun RegisterScreen(
-    /* onLoginClick: () -> Unit = {},*/
+    onLoginClick: () -> Unit = {},
     onRegisterClick: (email: String, name: String, verify: Boolean) -> Unit = { _, _, _ ->},
     /*onForgotPasswordClick: () -> Unit = {},*/
 ) {
@@ -146,7 +146,7 @@ fun RegisterScreen(
             Spacer(Modifier.height(24.dp))
 
             // ── Bottom links ──────────────────────────────────────────────
-            LinkText(text = "I HAVE AN ACCOUNT", onClick = { /* TODO: Navigate to settings */ })
+            LinkText(text = "I HAVE AN ACCOUNT", onClick = {onLoginClick()})
             Spacer(Modifier.height(8.dp))
 
         }

@@ -43,7 +43,9 @@ fun FastOutfitNavGraph()
         }
 
         composable(Routes.REGISTER) {
-            RegisterScreen()
+            RegisterScreen(
+                onLoginClick = {navController.navigate(Routes.LOGIN)}
+            )
         }
         composable(Routes.SETTINGS) { SettingsScreen() }
     }
