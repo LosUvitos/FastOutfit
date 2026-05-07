@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.uvitos.fastoutfit.ui.components.Routes
 import com.uvitos.fastoutfit.ui.screens.LoginScreen
+import com.uvitos.fastoutfit.ui.screens.HomeScreen
 
 @Composable
 fun FastOutfitNavGraph()
@@ -19,6 +20,18 @@ fun FastOutfitNavGraph()
             LoginScreen(
                 onLoginClick = {name, password -> navController.navigate(Routes.HOME)},
                 onRegisterClick = {navController.navigate(Routes.REGISTER)}
+                )
+        }
+
+        composable(Routes.Home) {
+                HomeScreen(
+                    userName = "USUARIO",
+                    onSettingsClick = { /* TODO: Navigate to settings */ },
+                    onProfileClick = { /* TODO: Navigate to profile */ },
+                    onShuffleClick = { /* TODO: Generate new outfit */ },
+                    onFavoriteClick = { /* TODO: Save outfit to favorites */ },
+                    onAddGarmentClick = { /* TODO: Navigate to add garment */ },
+                    onWardrobeClick = { /* TODO: Navigate to wardrobe */ }
                 )
         }
     }
