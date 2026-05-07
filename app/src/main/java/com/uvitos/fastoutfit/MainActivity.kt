@@ -4,14 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.uvitos.fastoutfit.navigation.FastOutfitNavGraph
+import com.uvitos.fastoutfit.ui.screens.HomeScreen
 import com.uvitos.fastoutfit.ui.theme.FastOutfitTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +13,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FastOutfitTheme {
-                FastOutfitNavGraph()
+                HomeScreen(
+                    userName = "USUARIO",
+                    onSettingsClick = { /* TODO: Navigate to settings */ },
+                    onProfileClick = { /* TODO: Navigate to profile */ },
+                    onShuffleClick = { /* TODO: Generate new outfit */ },
+                    onFavoriteClick = { /* TODO: Save outfit to favorites */ },
+                    onAddGarmentClick = { /* TODO: Navigate to add garment */ },
+                    onWardrobeClick = { /* TODO: Navigate to wardrobe */ }
+                )
             }
         }
     }
