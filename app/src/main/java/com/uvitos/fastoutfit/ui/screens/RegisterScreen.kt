@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.ui.components.*
 import com.uvitos.fastoutfit.ui.theme.*
+import com.uvitos.fastoutfit.ui.viewmodel.AuthState
 
 /**
  * LoginScreen
@@ -41,114 +42,72 @@ import com.uvitos.fastoutfit.ui.theme.*
 @Composable
 fun RegisterScreen(
     onLoginClick: () -> Unit = {},
-    onRegisterClick: (email: String, name: String, verify: Boolean) -> Unit = { _, _, _ ->},
-    /*onForgotPasswordClick: () -> Unit = {},*/
+    onRegisterClick: (email: String, password: String, confirmPassword: String) -> Unit = { _, _, _ -> },
+    authState: AuthState = AuthState.Idle,
 ) {
-
-    var email    by remember { mutableStateOf("") }
-    var name     by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var email     by remember { mutableStateOf("") }
+    var name      by remember { mutableStateOf("") }
+    var password  by remember { mutableStateOf("") }
     var password2 by remember { mutableStateOf("") }
-    var matchPasswords by remember { mutableStateOf(false) }
+    var showtext  by remember { mutableStateOf(false) }
+    val matchPasswords = password == password2
 
     AppBackground {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 40.dp),
+            modifier = Modifier.fillMaxSize().padding(horizontal = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(60.dp))
-
-            // ── Logo ──────────────────────────────────────────────────────
             BoltLogo2()
-
             Spacer(Modifier.height(20.dp))
-
-            // ── Title ─────────────────────────────────────────────────────
-            Text(
-                text = "FAST\nOUTFIT",
-                color = TextPrimary,
-                fontSize = 42.sp,
-                fontWeight = FontWeight.ExtraBold,
-                textAlign = TextAlign.Center,
-                lineHeight = 44.sp,
-                letterSpacing = 3.sp,
-            )
-
+            Text("FAST\nOUTFIT", color = TextPrimary, fontSize = 42.sp,
+                fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center,
+                lineHeight = 44.sp, letterSpacing = 3.sp)
             Spacer(Modifier.height(4.dp))
-
-            Text(
-                text = "REGISTER",
-                color = TextPrimary,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 4.sp,
-            )
-
+            Text("REGISTER", color = TextPrimary, fontSize = 18.sp,
+                fontWeight = FontWeight.Bold, letterSpacing = 4.sp)
             Spacer(Modifier.height(32.dp))
 
-            // ── Fields ────────────────────────────────────────────────────
-            OutfitTextField(
-                value = email,
-                onValueChange = { email = it },
-                placeholder = "e-mail",
-            )
-
+            OutfitTextField(value = email, onValueChange = { email = it }, placeholder = "e-mail")
             Spacer(Modifier.height(12.dp))
-
-            OutfitTextField(
-                value = name,
-                onValueChange = { name = it },
-                placeholder = "name",
-            )
-
+            OutfitTextField(value = name, onValueChange = { name = it }, placeholder = "name")
             Spacer(Modifier.height(12.dp))
-
-            OutfitTextField(
-                value = password,
-                onValueChange = { password = it },
-                placeholder = "Password",
-                isPassword = true,
-            )
-
+            OutfitTextField(value = password, onValueChange = { password = it },
+                placeholder = "Password", isPassword = true)
             Spacer(Modifier.height(12.dp))
-            var showtext by remember { mutableStateOf(false) }
             OutfitTextField(
                 value = password2,
-                onValueChange ={ newValue ->
-                    password2 = newValue
-                    matchPasswords = password == newValue
-
-                    showtext = true
-                },
+                onValueChange = { password2 = it; showtext = true },
                 placeholder = "Confirm Password",
                 isPassword = true,
-
             )
-            if (!matchPasswords and showtext) {
-                Text(
-                    text = "passwords dont match",
-                    color = MaterialTheme.colorScheme.error,
+
+            if (showtext && !matchPasswords) {
+                Text("Las contraseñas no coinciden", color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.padding(start = 16.dp, top = 4.dp)
-                )
+                    modifier = Modifier.padding(start = 16.dp, top = 4.dp))
+            }
+
+            // Error de Firebase
+            if (authState is AuthState.Error) {
+                Spacer(Modifier.height(8.dp))
+                Text(authState.message, color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelSmall)
             }
 
             Spacer(Modifier.height(40.dp))
 
-            // ── Register button ──────────────────────────────────────────────
-            GoldButton(
-                text = "LOG IN",
-                onClick = { onRegisterClick(email, name, verify(password, password2)) },
-            )
+            if (authState is AuthState.Loading) {
+                CircularProgressIndicator()
+            } else {
+                GoldButton(
+                    text = "REGISTER",
+                    onClick = { onRegisterClick(email, password, password2) }
+                )
+            }
 
             Spacer(Modifier.height(24.dp))
-
-            // ── Bottom links ──────────────────────────────────────────────
-            LinkText(text = "I HAVE AN ACCOUNT", onClick = {onLoginClick()})
-            Spacer(Modifier.height(8.dp))
-
+            LinkText(text = "I HAVE AN ACCOUNT", onClick = onLoginClick)
         }
     }
 }

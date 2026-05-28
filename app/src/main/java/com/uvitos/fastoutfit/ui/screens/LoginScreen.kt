@@ -1,5 +1,6 @@
 package com.uvitos.fastoutfit.ui.screens
 
+import android.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.ui.components.*
 import com.uvitos.fastoutfit.ui.theme.*
+import com.uvitos.fastoutfit.ui.viewmodel.AuthState
 
 /**
  * LoginScreen
@@ -43,9 +45,17 @@ fun LoginScreen(
     onLoginClick: (name: String, password: String) -> Unit = { _, _ -> },
     onRegisterClick: () -> Unit = {},
     onForgotPasswordClick: () -> Unit = {},
+    authState: AuthState = AuthState.Idle,
+    onGoogleSignIn: () ->  Unit = {},
 ) {
-    var name     by remember { mutableStateOf("") }
+    var email     by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    if (authState is AuthState.Error){
+        LaunchedEffect(authState) {
+            // Error se muestra en UI
+        }
+    }
 
     AppBackground {
         Column(
@@ -86,9 +96,9 @@ fun LoginScreen(
 
             // ── Fields ────────────────────────────────────────────────────
             OutfitTextField(
-                value = name,
-                onValueChange = { name = it },
-                placeholder = "name",
+                value = email,
+                onValueChange = { email = it },
+                placeholder = "email",
             )
 
             Spacer(Modifier.height(12.dp))
@@ -100,13 +110,30 @@ fun LoginScreen(
                 isPassword = true,
             )
 
+            // Mensaje de error
+            if (authState is AuthState.Error){
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = authState.message,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelSmall
+                )
+            }
+
             Spacer(Modifier.height(40.dp))
 
-            // ── Login button ──────────────────────────────────────────────
-            GoldButton(
-                text = "LOG IN",
-                onClick = { onLoginClick(name, password) },
-            )
+            if (authState is AuthState.Loading){
+                CircularProgressIndicator()
+            } else {
+                GoldButton(text = "LOG IN",
+                    onClick = {onLoginClick(email, password)})
+                Spacer(Modifier.height(12.dp))
+
+                // Botón de google
+                OutlinedButton(onClick = onGoogleSignIn, modifier = Modifier.fillMaxWidth()) {
+                    Text("Continuar con Google", color = TextPrimary)
+                }
+            }
 
             Spacer(Modifier.height(24.dp))
 

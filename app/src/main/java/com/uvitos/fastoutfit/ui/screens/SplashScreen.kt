@@ -1,4 +1,4 @@
-package com.fastoutfit.ui.screens
+package com.uvitos.fastoutfit.ui.screens
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
