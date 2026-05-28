@@ -21,6 +21,8 @@ class AuthViewModel : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState
+    private val _resetState = MutableStateFlow<AuthState>(AuthState.Idle)
+    val resetState: StateFlow<AuthState> = _resetState
 
     val isUserLoggedIn: Boolean
         get() = auth.currentUser != null
@@ -52,6 +54,13 @@ class AuthViewModel : ViewModel() {
             _authState.value = AuthState.Error("Las contraseñas no coinciden")
             return
         }
+
+        val passwordError = validatePassword(password)
+        if (passwordError != null){
+            _authState.value = AuthState.Error(passwordError)
+            return
+        }
+
         viewModelScope.launch {
             _authState.value = AuthState.Loading
             try {
@@ -81,7 +90,36 @@ class AuthViewModel : ViewModel() {
         _authState.value = AuthState.Idle
     }
 
+    fun sendPasswordReset(email: String){
+        if (email.isBlank()){
+            _resetState.value = AuthState.Error("Ingresa tu correo electrónico")
+            return
+        }
+        viewModelScope.launch {
+            _resetState.value = AuthState.Loading
+            try {
+                auth.sendPasswordResetEmail(email).await()
+                _resetState.value = AuthState.Success
+            } catch (e: Exception){
+                _resetState.value = AuthState.Error(e.message ?: "Error al enviar el correo de reestablecimiento")
+            }
+        }
+    }
+
+    fun resetPasswordState(){
+        _resetState.value = AuthState.Idle
+    }
     fun resetState(){
         _authState.value = AuthState.Idle
+    }
+
+    private fun validatePassword(password: String): String? {
+        if (password.length < 8)  return "Mínimo 8 caracteres"
+        if (password.length > 16) return "Máximo 16 caracteres"
+        if (!password.any { it.isUpperCase() }) return "Debe tener al menos una mayúscula"
+        if (!password.any { it.isLowerCase() }) return "Debe tener al menos una minúscula"
+        if (!password.any { it.isDigit() })     return "Debe tener al menos un número"
+        if (!password.any { it in "_-@*#\$!" }) return "Debe tener al menos un signo (_-@*#\$!)"
+        return null
     }
 }
