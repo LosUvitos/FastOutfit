@@ -54,6 +54,13 @@ class AuthViewModel : ViewModel() {
             _authState.value = AuthState.Error("Las contraseñas no coinciden")
             return
         }
+
+        val passwordError = validatePassword(password)
+        if (passwordError != null){
+            _authState.value = AuthState.Error(passwordError)
+            return
+        }
+
         viewModelScope.launch {
             _authState.value = AuthState.Loading
             try {
@@ -104,5 +111,15 @@ class AuthViewModel : ViewModel() {
     }
     fun resetState(){
         _authState.value = AuthState.Idle
+    }
+
+    private fun validatePassword(password: String): String? {
+        if (password.length < 8)  return "Mínimo 8 caracteres"
+        if (password.length > 16) return "Máximo 16 caracteres"
+        if (!password.any { it.isUpperCase() }) return "Debe tener al menos una mayúscula"
+        if (!password.any { it.isLowerCase() }) return "Debe tener al menos una minúscula"
+        if (!password.any { it.isDigit() })     return "Debe tener al menos un número"
+        if (!password.any { it in "_-@*#\$!" }) return "Debe tener al menos un signo (_-@*#\$!)"
+        return null
     }
 }

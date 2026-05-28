@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.ui.components.*
 import com.uvitos.fastoutfit.ui.theme.*
 import com.uvitos.fastoutfit.ui.viewmodel.AuthState
+import androidx.compose.foundation.background
+import androidx.compose.ui.text.toUpperCase
 
 /**
  * LoginScreen
@@ -60,21 +62,48 @@ fun RegisterScreen(
             Spacer(Modifier.height(60.dp))
             BoltLogo2()
             Spacer(Modifier.height(20.dp))
-            Text("FAST\nOUTFIT", color = TextPrimary, fontSize = 42.sp,
+            Text("FAST\nOUTFIT",
+                color = TextPrimary,
+                fontSize = 42.sp,
                 fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center,
-                lineHeight = 44.sp, letterSpacing = 3.sp)
+                lineHeight = 44.sp, letterSpacing = 3.sp
+            )
+
             Spacer(Modifier.height(4.dp))
-            Text("REGISTER", color = TextPrimary, fontSize = 18.sp,
-                fontWeight = FontWeight.Bold, letterSpacing = 4.sp)
+
+            Text("REGISTER",
+                color = TextPrimary,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 4.sp
+            )
+
             Spacer(Modifier.height(32.dp))
 
-            OutfitTextField(value = email, onValueChange = { email = it }, placeholder = "e-mail")
+            OutfitTextField(value = email,
+                onValueChange = { email = it },
+                placeholder = "e-mail"
+            )
+
             Spacer(Modifier.height(12.dp))
-            OutfitTextField(value = name, onValueChange = { name = it }, placeholder = "name")
+
+            OutfitTextField(value = name,
+                onValueChange = { name = it },
+                placeholder = "name"
+            )
+
             Spacer(Modifier.height(12.dp))
-            OutfitTextField(value = password, onValueChange = { password = it },
-                placeholder = "Password", isPassword = true)
+
+            OutfitTextField(value = password,
+                onValueChange = { password = it },
+                placeholder = "Password",
+                isPassword = true
+            )
+
+            PasswordStrengthIndicator(password = password)
+
             Spacer(Modifier.height(12.dp))
+
             OutfitTextField(
                 value = password2,
                 onValueChange = { password2 = it; showtext = true },
@@ -159,5 +188,42 @@ fun BoltLogo2(size: Int = 120) {
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun PasswordStrengthIndicator(password: String) {
+    if (password.isEmpty()) return
+
+    val checks = listOf(
+        password.length >= 8,
+        password.length <= 16,
+        password.any { it.isUpperCase() },
+        password.any { it.isLowerCase() },
+        password.any { it.isDigit() },
+        password.any { it in "_-@*#\$!" }
+    )
+    val strength = checks.count { it }
+    val (color, label) = when {
+        strength <= 2 -> Color(0xFFE53935) to "Débil"
+        strength <= 4 -> Color(0xFFFFA726) to "Regular"
+        strength == 5 -> Color(0xFFFFEE58) to "Buena"
+        else          -> Color(0xFF66BB6A) to "Fuerte"
+    }
+
+    Column(modifier = Modifier.fillMaxWidth().padding(start = 4.dp, top = 4.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            repeat(6) { index ->
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(4.dp)
+                        .clip(RoundedCornerShape(2.dp))
+                        .background(if (index < strength) color else Color.Gray.copy(alpha = 0.3f))
+                )
+            }
+        }
+        Spacer(Modifier.height(2.dp))
+        Text(label, color = color, fontSize = 11.sp, letterSpacing = 1.sp)
     }
 }
