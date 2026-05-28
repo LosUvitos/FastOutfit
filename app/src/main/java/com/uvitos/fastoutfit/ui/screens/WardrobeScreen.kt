@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.R
 import com.uvitos.fastoutfit.ui.components.AppBackground
 import com.uvitos.fastoutfit.ui.components.GarmentPlaceholderCard
+import com.uvitos.fastoutfit.ui.components.WardrobeTabBar
 import com.uvitos.fastoutfit.ui.theme.*
 
 // Modelo de datos
@@ -131,9 +132,9 @@ fun WardrobeScreen(
             }
 
             // tabs inferiores
-            WardrobeBottomTabs(
-                selected  = selectedCategory,
-                onSelect  = { selectedCategory = it },
+            WardrobeTabBar(
+                selected = selectedCategory,
+                onSelect = { selectedCategory = it },
             )
         }
     }
@@ -238,7 +239,7 @@ private fun FilterAddBar(
     }
 }
 
-// ── Garment card con botones ⚡ y 🗑 ───────────────────────────────────────────
+//  Garment card con botones ⚡ y 🗑
 
 @Composable
 private fun GarmentCard(
@@ -291,7 +292,8 @@ private fun GarmentCard(
 
 // tabs
 
-@Composable
+// ---------------------------DISEÑO ANTERIOR DE LOS TABS INFERIORES--------------------------------
+/*@Composable
 private fun WardrobeBottomTabs(
     selected: ClothingCategory,
     onSelect: (ClothingCategory) -> Unit,
@@ -335,8 +337,8 @@ private fun WardrobeBottomTabs(
             }
         }
     }
-}
-
+}*/
+//--------------------------------------------------------------------------------------------------
 
 @Preview(
     name           = "Wardrobe Screen – Dark",
