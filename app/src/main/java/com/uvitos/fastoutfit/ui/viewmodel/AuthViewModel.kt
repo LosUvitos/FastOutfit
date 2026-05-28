@@ -63,5 +63,25 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+    fun loginWithGoogle(idToken: String){
+        viewModelScope.launch{
+            _authState.value = AuthState.Loading
+            try{
+                val credential = GoogleAuthProvider.getCredential(idToken, null)
+                auth.signInWithCredential(credential).await()
+                _authState.value = AuthState.Success
+            } catch (e: Exception){
+                _authState.value = AuthState.Error(e.message ?: "Error con google")
+            }
+        }
+    }
 
+    fun signOut(){
+        auth.signOut()
+        _authState.value = AuthState.Idle
+    }
+
+    fun resetState(){
+        _authState.value = AuthState.Idle
+    }
 }
