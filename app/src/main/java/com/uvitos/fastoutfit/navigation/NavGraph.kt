@@ -11,6 +11,7 @@ import com.uvitos.fastoutfit.ui.screens.HomeScreen
 import com.uvitos.fastoutfit.ui.screens.RegisterScreen
 import com.uvitos.fastoutfit.ui.screens.SettingsScreen
 import com.uvitos.fastoutfit.ui.screens.WardrobeScreen
+import com.uvitos.fastoutfit.ui.screens.addScreenTest
 
 @Composable
 fun FastOutfitNavGraph()
@@ -55,11 +56,15 @@ fun FastOutfitNavGraph()
                 onHomeClick    = { navController.navigate(Routes.HOME) },
                 onHelpClick    = { /* TODO: ayuda */ },
                 onProfileClick = { /* TODO: perfil */ },
-                onAddClick     = { category -> /* TODO: agregar prenda en $category */ },
+                onAddClick     = { navController.navigate(Routes.ADD_SCREEN_TEST) },
                 onFilterClick  = { category -> /* TODO: filtrar $category */ },
                 onFavoriteClick = { garment -> /* TODO: marcar favorito ${garment.id} */ },
                 onDeleteClick   = { garment -> /* TODO: eliminar ${garment.id} */ },
             )
+        }
+
+        composable(Routes.ADD_SCREEN_TEST) {
+            addScreenTest()
         }
     }
 }
