@@ -42,6 +42,8 @@ fun FastOutfitNavGraph() {
         }
 
         composable(Routes.LOGIN) {
+            val resetState by authViewModel.resetState.collectAsState()
+
             LaunchedEffect(authState) {
                 if (authState is AuthState.Success) {
                     authViewModel.resetState()
@@ -54,6 +56,7 @@ fun FastOutfitNavGraph() {
                 onLoginClick = { email, password -> authViewModel.login(email, password) },
                 onRegisterClick = { navController.navigate(Routes.REGISTER) },
                 onGoogleSignIn = { /* TODO */ },
+                onForgotPasswordClick = { email -> authViewModel.sendPasswordReset(email) },
                 authState = authState,
             )
         }

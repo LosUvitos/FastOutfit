@@ -44,12 +44,13 @@ import com.uvitos.fastoutfit.ui.viewmodel.AuthState
 fun LoginScreen(
     onLoginClick: (name: String, password: String) -> Unit = { _, _ -> },
     onRegisterClick: () -> Unit = {},
-    onForgotPasswordClick: () -> Unit = {},
+    onForgotPasswordClick: (email: String) -> Unit = {},
     authState: AuthState = AuthState.Idle,
     onGoogleSignIn: () ->  Unit = {},
 ) {
     var email     by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var showForgotDialog by remember { mutableStateOf(false) }
 
     if (authState is AuthState.Error){
         LaunchedEffect(authState) {
@@ -57,6 +58,13 @@ fun LoginScreen(
         }
     }
 
+    if (showForgotDialog){
+        ForgotPasswordDialog(
+            onDismiss = { showForgotDialog = false},
+            onSend = {emailInput -> onForgotPasswordClick(emailInput)
+            showForgotDialog = false}
+        )
+    }
     AppBackground {
         Column(
             modifier = Modifier
@@ -140,7 +148,7 @@ fun LoginScreen(
             // ── Bottom links ──────────────────────────────────────────────
             LinkText(text = "I DONT HAVE AN ACCOUNT", onClick = onRegisterClick)
             Spacer(Modifier.height(8.dp))
-            LinkText(text = "I FORGOT MY PASSWORD", onClick = onForgotPasswordClick)
+            LinkText(text = "I FORGOT MY PASSWORD", onClick = { showForgotDialog = true})
         }
     }
 }
@@ -189,4 +197,73 @@ fun BoltLogo(size: Int = 120) {
             }
         }
     }
+}
+
+@Composable
+private fun ForgotPasswordDialog(
+    onDismiss: () -> Unit,
+    onSend: (email: String) -> Unit,
+) {
+    var email by remember { mutableStateOf("") }
+    var sent  by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFF1E1E1E),
+        title = {
+            Text(
+                text = "RESET PASSWORD",
+                color = TextPrimary,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 3.sp,
+            )
+        },
+        text = {
+            Column {
+                if (sent) {
+                    Text(
+                        text = "Correo enviado. Revisa tu bandeja de entrada.",
+                        color = TextSecondary,
+                        fontSize = 13.sp,
+                    )
+                } else {
+                    Text(
+                        text = "Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.",
+                        color = TextSecondary,
+                        fontSize = 13.sp,
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    OutfitTextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        placeholder = "e-mail",
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            if (sent) {
+                TextButton(onClick = onDismiss) {
+                    Text("CERRAR", color = GoldAccent, letterSpacing = 2.sp)
+                }
+            } else {
+                TextButton(onClick = {
+                    if (email.isNotBlank()) {
+                        sent = true
+                        onSend(email)
+                    }
+                }) {
+                    Text("ENVIAR", color = GoldAccent, letterSpacing = 2.sp)
+                }
+            }
+        },
+        dismissButton = {
+            if (!sent) {
+                TextButton(onClick = onDismiss) {
+                    Text("CANCELAR", color = TextSecondary, letterSpacing = 2.sp)
+                }
+            }
+        }
+    )
 }

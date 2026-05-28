@@ -21,6 +21,8 @@ class AuthViewModel : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState
+    private val _resetState = MutableStateFlow<AuthState>(AuthState.Idle)
+    val resetState: StateFlow<AuthState> = _resetState
 
     val isUserLoggedIn: Boolean
         get() = auth.currentUser != null
@@ -81,6 +83,25 @@ class AuthViewModel : ViewModel() {
         _authState.value = AuthState.Idle
     }
 
+    fun sendPasswordReset(email: String){
+        if (email.isBlank()){
+            _resetState.value = AuthState.Error("Ingresa tu correo electrónico")
+            return
+        }
+        viewModelScope.launch {
+            _resetState.value = AuthState.Loading
+            try {
+                auth.sendPasswordResetEmail(email).await()
+                _resetState.value = AuthState.Success
+            } catch (e: Exception){
+                _resetState.value = AuthState.Error(e.message ?: "Error al enviar el correo de reestablecimiento")
+            }
+        }
+    }
+
+    fun resetPasswordState(){
+        _resetState.value = AuthState.Idle
+    }
     fun resetState(){
         _authState.value = AuthState.Idle
     }
