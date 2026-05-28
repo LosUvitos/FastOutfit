@@ -96,6 +96,8 @@ object Routes {
     const val SHIRTS   = "shirts"
     const val ADD_ITEM = "add_item"
     const val SETTINGS = "settings"
+
+    const val WARDROBE = "Wardrobe"
 }
 
 /** Gold pill button */

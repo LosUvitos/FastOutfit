@@ -10,6 +10,7 @@ import com.uvitos.fastoutfit.ui.screens.LoginScreen
 import com.uvitos.fastoutfit.ui.screens.HomeScreen
 import com.uvitos.fastoutfit.ui.screens.RegisterScreen
 import com.uvitos.fastoutfit.ui.screens.SettingsScreen
+import com.uvitos.fastoutfit.ui.screens.WardrobeScreen
 
 @Composable
 fun FastOutfitNavGraph()
@@ -38,7 +39,7 @@ fun FastOutfitNavGraph()
                     onShuffleClick = { /* TODO: Generate new outfit */ },
                     onFavoriteClick = { /* TODO: Save outfit to favorites */ },
                     onAddGarmentClick = { /* TODO: Navigate to add garment */ },
-                    onWardrobeClick = { /* TODO: Navigate to wardrobe */ }
+                    onWardrobeClick = { navController.navigate(Routes.WARDROBE) }
                 )
         }
 
@@ -48,5 +49,17 @@ fun FastOutfitNavGraph()
             )
         }
         composable(Routes.SETTINGS) { SettingsScreen() }
+
+        composable(Routes.WARDROBE) {
+            WardrobeScreen(
+                onHomeClick    = { navController.navigate(Routes.HOME) },
+                onHelpClick    = { /* TODO: ayuda */ },
+                onProfileClick = { /* TODO: perfil */ },
+                onAddClick     = { category -> /* TODO: agregar prenda en $category */ },
+                onFilterClick  = { category -> /* TODO: filtrar $category */ },
+                onFavoriteClick = { garment -> /* TODO: marcar favorito ${garment.id} */ },
+                onDeleteClick   = { garment -> /* TODO: eliminar ${garment.id} */ },
+            )
+        }
     }
 }
