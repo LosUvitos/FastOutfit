@@ -9,8 +9,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -28,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.R
 import com.uvitos.fastoutfit.ui.theme.*
+import androidx.compose.runtime.setValue
+
 
 /**
  * Full-screen dark navy background.
@@ -60,7 +67,9 @@ fun OutfitTextField(
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
 ) {
-    val visualTransformation = if (isPassword)
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    val visualTransformation = if (isPassword && !passwordVisible)
         androidx.compose.ui.text.input.PasswordVisualTransformation()
     else
         androidx.compose.ui.text.input.VisualTransformation.None
@@ -72,6 +81,20 @@ fun OutfitTextField(
             Text(placeholder, color = InputText.copy(alpha = 0.5f))
         },
         visualTransformation = visualTransformation,
+        trailingIcon = {
+            if (isPassword){
+                IconButton(onClick = {passwordVisible = !passwordVisible}) {
+                    Icon(
+                        imageVector = if (passwordVisible)
+                            Icons.Filled.Visibility
+                        else
+                        Icons.Filled.VisibilityOff,
+                        contentDescription = if (passwordVisible) "Ocultar Contraseña" else "Mostrar contraseña",
+                        tint = InputText.copy(alpha = 0.6f)
+                    )
+                }
+            }
+        },
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp)),

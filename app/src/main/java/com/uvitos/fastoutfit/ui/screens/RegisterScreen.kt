@@ -22,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.ui.components.*
 import com.uvitos.fastoutfit.ui.theme.*
+import com.uvitos.fastoutfit.ui.viewmodel.AuthState
+import androidx.compose.foundation.background
+import androidx.compose.ui.text.toUpperCase
 
 /**
  * LoginScreen
@@ -41,114 +44,99 @@ import com.uvitos.fastoutfit.ui.theme.*
 @Composable
 fun RegisterScreen(
     onLoginClick: () -> Unit = {},
-    onRegisterClick: (email: String, name: String, verify: Boolean) -> Unit = { _, _, _ ->},
-    /*onForgotPasswordClick: () -> Unit = {},*/
+    onRegisterClick: (email: String, password: String, confirmPassword: String) -> Unit = { _, _, _ -> },
+    authState: AuthState = AuthState.Idle,
 ) {
-
-    var email    by remember { mutableStateOf("") }
-    var name     by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var email     by remember { mutableStateOf("") }
+    var name      by remember { mutableStateOf("") }
+    var password  by remember { mutableStateOf("") }
     var password2 by remember { mutableStateOf("") }
-    var matchPasswords by remember { mutableStateOf(false) }
+    var showtext  by remember { mutableStateOf(false) }
+    val matchPasswords = password == password2
 
     AppBackground {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 40.dp),
+            modifier = Modifier.fillMaxSize().padding(horizontal = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(60.dp))
-
-            // ── Logo ──────────────────────────────────────────────────────
             BoltLogo2()
-
             Spacer(Modifier.height(20.dp))
-
-            // ── Title ─────────────────────────────────────────────────────
-            Text(
-                text = "FAST\nOUTFIT",
+            Text("FAST\nOUTFIT",
                 color = TextPrimary,
                 fontSize = 42.sp,
-                fontWeight = FontWeight.ExtraBold,
-                textAlign = TextAlign.Center,
-                lineHeight = 44.sp,
-                letterSpacing = 3.sp,
+                fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center,
+                lineHeight = 44.sp, letterSpacing = 3.sp
             )
 
             Spacer(Modifier.height(4.dp))
 
-            Text(
-                text = "REGISTER",
+            Text("REGISTER",
                 color = TextPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                letterSpacing = 4.sp,
+                letterSpacing = 4.sp
             )
 
             Spacer(Modifier.height(32.dp))
 
-            // ── Fields ────────────────────────────────────────────────────
-            OutfitTextField(
-                value = email,
+            OutfitTextField(value = email,
                 onValueChange = { email = it },
-                placeholder = "e-mail",
+                placeholder = "e-mail"
             )
 
             Spacer(Modifier.height(12.dp))
 
-            OutfitTextField(
-                value = name,
+            OutfitTextField(value = name,
                 onValueChange = { name = it },
-                placeholder = "name",
+                placeholder = "name"
             )
 
             Spacer(Modifier.height(12.dp))
 
-            OutfitTextField(
-                value = password,
+            OutfitTextField(value = password,
                 onValueChange = { password = it },
                 placeholder = "Password",
-                isPassword = true,
+                isPassword = true
             )
+
+            PasswordStrengthIndicator(password = password)
 
             Spacer(Modifier.height(12.dp))
-            var showtext by remember { mutableStateOf(false) }
+
             OutfitTextField(
                 value = password2,
-                onValueChange ={ newValue ->
-                    password2 = newValue
-                    matchPasswords = password == newValue
-
-                    showtext = true
-                },
+                onValueChange = { password2 = it; showtext = true },
                 placeholder = "Confirm Password",
                 isPassword = true,
-
             )
-            if (!matchPasswords and showtext) {
-                Text(
-                    text = "passwords dont match",
-                    color = MaterialTheme.colorScheme.error,
+
+            if (showtext && !matchPasswords) {
+                Text("Las contraseñas no coinciden", color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.padding(start = 16.dp, top = 4.dp)
-                )
+                    modifier = Modifier.padding(start = 16.dp, top = 4.dp))
+            }
+
+            // Error de Firebase
+            if (authState is AuthState.Error) {
+                Spacer(Modifier.height(8.dp))
+                Text(authState.message, color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelSmall)
             }
 
             Spacer(Modifier.height(40.dp))
 
-            // ── Register button ──────────────────────────────────────────────
-            GoldButton(
-                text = "LOG IN",
-                onClick = { onRegisterClick(email, name, verify(password, password2)) },
-            )
+            if (authState is AuthState.Loading) {
+                CircularProgressIndicator()
+            } else {
+                GoldButton(
+                    text = "REGISTER",
+                    onClick = { onRegisterClick(email, password, password2) }
+                )
+            }
 
             Spacer(Modifier.height(24.dp))
-
-            // ── Bottom links ──────────────────────────────────────────────
-            LinkText(text = "I HAVE AN ACCOUNT", onClick = {onLoginClick()})
-            Spacer(Modifier.height(8.dp))
-
+            LinkText(text = "I HAVE AN ACCOUNT", onClick = onLoginClick)
         }
     }
 }
@@ -197,6 +185,56 @@ fun BoltLogo2(size: Int = 120) {
                 Box(contentAlignment = Alignment.Center) {
                     // Bolt icon — replace with your drawable
                     //BoltShape(color = Color(0xFF1A1A1A))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PasswordStrengthIndicator(password: String) {
+    if (password.isEmpty()) return
+
+    val rules = listOf(
+        "Mínimo 8 caracteres"        to (password.length >= 8),
+        "Máximo 16 caracteres"       to (password.length <= 16),
+        "Al menos una mayúscula"     to password.any { it.isUpperCase() },
+        "Al menos una minúscula"     to password.any { it.isLowerCase() },
+        "Al menos un número"         to password.any { it.isDigit() },
+        "Al menos un signo (_-@*#\$!)" to password.any { it in "_-@*#\$!" }
+    )
+
+    val allValid = rules.all { it.second }
+    if (allValid) return
+
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 6.dp),
+        shape = RoundedCornerShape(10.dp),
+        color = Color(0x1F2933),
+        tonalElevation = 4.dp,
+        shadowElevation = 4.dp,
+
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+            rules.forEach { (label, passed) ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = 2.dp)
+                ) {
+                    Text(
+                        text = if (passed) "✓" else "✗",
+                        color = if (passed) Color(0xFF66BB6A) else Color(0xFFE53935),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = label,
+                        color = if (passed) Color(0xFF66BB6A) else TextSecondary,
+                        fontSize = 14.sp,
+                    )
                 }
             }
         }
