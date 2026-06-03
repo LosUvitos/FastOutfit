@@ -1,6 +1,7 @@
 package com.uvitos.fastoutfit.ui.screens
 
 import android.content.res.Configuration
+import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material.icons.Icons
@@ -16,6 +17,7 @@ import com.uvitos.fastoutfit.R
 import com.uvitos.fastoutfit.navigation.Categories
 import com.uvitos.fastoutfit.ui.components.AppBackground
 import com.uvitos.fastoutfit.ui.components.GarmentPlaceholderCard
+import com.uvitos.fastoutfit.ui.components.ImagePicker
 import com.uvitos.fastoutfit.ui.theme.*
 
 
@@ -96,6 +98,7 @@ private fun AdditionCard(
     onOkayClick: () -> Unit,
     onCancelClick: () -> Unit
 ) {
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
     var name by remember { mutableStateOf("") }
     val options = Categories.all
     var selected by remember { mutableStateOf(options[0]) }
@@ -104,44 +107,10 @@ private fun AdditionCard(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
         // Placeholder card (se reemplazará con imagen real)
-        GarmentPlaceholderCard(
-            cardSize = 300.dp,
-            modifier = Modifier.height(400.dp)
+        ImagePicker(
+                imageUri = imageUri,
+                onImageSelected = {uri -> imageUri = uri}
         )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-                .padding(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            IconButton(
-                onClick = onOkayClick,
-                modifier = Modifier.size(64.dp),
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_ok),
-                    contentDescription = "Favorite",
-                    tint = Blanco,
-                    modifier = Modifier.size(26.dp),
-                )
-            }
-
-            Spacer(modifier = Modifier.width(100.dp))
-            IconButton(
-                onClick = onCancelClick,
-                modifier = Modifier.size(64.dp),
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_cancel),
-                    contentDescription = "Delete",
-                    tint = Blanco,
-                    modifier = Modifier.size(26.dp),
-                )
-            }
-        }
 
         OutlinedTextField(
             value = name,
@@ -174,6 +143,39 @@ private fun AdditionCard(
                         }
                     )
                 }
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
+                .padding(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            IconButton(
+                onClick = onOkayClick,
+                modifier = Modifier.size(64.dp),
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_ok),
+                    contentDescription = "Favorite",
+                    tint = Blanco,
+                    modifier = Modifier.size(26.dp),
+                )
+            }
+
+            Spacer(modifier = Modifier.width(100.dp))
+            IconButton(
+                onClick = onCancelClick,
+                modifier = Modifier.size(64.dp),
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_cancel),
+                    contentDescription = "Delete",
+                    tint = Blanco,
+                    modifier = Modifier.size(26.dp),
+                )
             }
         }
     }

@@ -79,8 +79,8 @@ fun ImagePicker(
         // Image preview box
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
+                .width(300.dp)
+                .height(400.dp)
                 .clip(RoundedCornerShape(4.dp))
                 .background(Color(0xFFBDBDBD)),
             contentAlignment = Alignment.Center,
