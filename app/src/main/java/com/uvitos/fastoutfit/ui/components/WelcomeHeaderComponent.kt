@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -31,7 +32,7 @@ fun WelcomeHeaderComponent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "BIENVENIDO, $userName",
+            text = stringResource(com.uvitos.fastoutfit.R.string.welcome_message, userName),
             color = textColor,
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
@@ -42,7 +43,7 @@ fun WelcomeHeaderComponent(
 
         Icon(
             imageVector = Icons.Default.Checkroom,
-            contentDescription = "Hanger",
+            contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_wardrobe),
             tint = iconTint,
             modifier = Modifier.size(48.dp)
         )

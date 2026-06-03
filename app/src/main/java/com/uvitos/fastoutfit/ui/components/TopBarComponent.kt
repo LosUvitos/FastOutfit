@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.uvitos.fastoutfit.ui.theme.ColorSecondary
@@ -42,7 +43,7 @@ fun TopBarComponent(
         ) {
             Icon(
                 imageVector = Icons.Default.Settings,
-                contentDescription = "Settings",
+                contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_settings),
                 tint = Color.White,
                 modifier = Modifier.size(24.dp)
             )
@@ -60,7 +61,7 @@ fun TopBarComponent(
         ) {
             Icon(
                 imageVector = Icons.Default.AccountCircle,
-                contentDescription = "Profile",
+                contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_profile),
                 tint = Color.White,
                 modifier = Modifier.size(24.dp)
             )

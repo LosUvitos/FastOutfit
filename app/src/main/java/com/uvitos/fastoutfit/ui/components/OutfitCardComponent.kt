@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.ui.theme.AccentMain
@@ -45,7 +46,7 @@ fun OutfitCardComponent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Outfit del día",
+                text = stringResource(com.uvitos.fastoutfit.R.string.outfit_of_day),
                 color = Color.White,
                 fontSize = 18.sp
             )
@@ -80,7 +81,7 @@ fun OutfitCardComponent(
                 IconButton(onClick = onShuffleClick) {
                     Icon(
                         imageVector = Icons.Default.Shuffle,
-                        contentDescription = "Shuffle outfit",
+                        contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_shuffle),
                         tint = Color.White,
                         modifier = Modifier.size(32.dp)
                     )
@@ -89,7 +90,7 @@ fun OutfitCardComponent(
                 IconButton(onClick = onFavoriteClick) {
                     Icon(
                         imageVector = Icons.Default.FlashOn,
-                        contentDescription = "Add to favorites",
+                        contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_favorite),
                         tint = AccentMain,
                         modifier = Modifier.size(32.dp)
                     )

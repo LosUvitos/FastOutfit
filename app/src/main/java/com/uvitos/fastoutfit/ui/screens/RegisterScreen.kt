@@ -1,30 +1,21 @@
 package com.uvitos.fastoutfit.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.ui.components.*
 import com.uvitos.fastoutfit.ui.theme.*
 import com.uvitos.fastoutfit.ui.viewmodel.AuthState
-import androidx.compose.foundation.background
-import androidx.compose.ui.text.toUpperCase
 
 /**
  * LoginScreen
@@ -45,6 +36,7 @@ import androidx.compose.ui.text.toUpperCase
 fun RegisterScreen(
     onLoginClick: () -> Unit = {},
     onRegisterClick: (email: String, password: String, confirmPassword: String) -> Unit = { _, _, _ -> },
+    onGoogleSignIn: () -> Unit = {},
     authState: AuthState = AuthState.Idle,
 ) {
     var email     by remember { mutableStateOf("") }
@@ -60,9 +52,9 @@ fun RegisterScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(60.dp))
-            BoltLogo2()
+            BoltLogo()
             Spacer(Modifier.height(20.dp))
-            Text("FAST\nOUTFIT",
+            Text(stringResource(com.uvitos.fastoutfit.R.string.app_title),
                 color = TextPrimary,
                 fontSize = 42.sp,
                 fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center,
@@ -71,7 +63,7 @@ fun RegisterScreen(
 
             Spacer(Modifier.height(4.dp))
 
-            Text("REGISTER",
+            Text(stringResource(com.uvitos.fastoutfit.R.string.register_title),
                 color = TextPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
@@ -82,21 +74,21 @@ fun RegisterScreen(
 
             OutfitTextField(value = email,
                 onValueChange = { email = it },
-                placeholder = "e-mail"
+                placeholder = stringResource(com.uvitos.fastoutfit.R.string.email_placeholder)
             )
 
             Spacer(Modifier.height(12.dp))
 
             OutfitTextField(value = name,
                 onValueChange = { name = it },
-                placeholder = "name"
+                placeholder = stringResource(com.uvitos.fastoutfit.R.string.name_placeholder)
             )
 
             Spacer(Modifier.height(12.dp))
 
             OutfitTextField(value = password,
                 onValueChange = { password = it },
-                placeholder = "Password",
+                placeholder = stringResource(com.uvitos.fastoutfit.R.string.password_placeholder),
                 isPassword = true
             )
 
@@ -107,12 +99,12 @@ fun RegisterScreen(
             OutfitTextField(
                 value = password2,
                 onValueChange = { password2 = it; showtext = true },
-                placeholder = "Confirm Password",
+                placeholder = stringResource(com.uvitos.fastoutfit.R.string.confirm_password_placeholder),
                 isPassword = true,
             )
 
             if (showtext && !matchPasswords) {
-                Text("Las contraseñas no coinciden", color = MaterialTheme.colorScheme.error,
+                Text(stringResource(com.uvitos.fastoutfit.R.string.passwords_dont_match), color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier.padding(start = 16.dp, top = 4.dp))
             }
@@ -130,63 +122,17 @@ fun RegisterScreen(
                 CircularProgressIndicator()
             } else {
                 GoldButton(
-                    text = "REGISTER",
+                    text = stringResource(com.uvitos.fastoutfit.R.string.register),
                     onClick = { onRegisterClick(email, password, password2) }
                 )
+                Spacer(Modifier.height(12.dp))
+                OutlinedButton(onClick = onGoogleSignIn, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(com.uvitos.fastoutfit.R.string.continue_with_google), color = TextPrimary)
+                }
             }
 
             Spacer(Modifier.height(24.dp))
-            LinkText(text = "I HAVE AN ACCOUNT", onClick = onLoginClick)
-        }
-    }
-}
-
-fun verify(k1: String,k2: String): Boolean{
-    return k1 == k2
-}
-
-@Composable
-private fun LinkText(text: String, onClick: () -> Unit) {
-    TextButton(onClick = onClick) {
-        Text(
-            text = text,
-            color = TextSecondary,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            letterSpacing = 1.sp,
-            textDecoration = TextDecoration.Underline,
-        )
-    }
-}
-
-/** Shared metallic bolt logo used on Login & Register screens */
-@Composable
-fun BoltLogo2(size: Int = 120) {
-    // Outer metallic ring
-    Surface(
-        modifier = Modifier.size(size.dp),
-        shape = CircleShape,
-        color = Color(0xFFB0B0B0),
-        shadowElevation = 12.dp,
-        tonalElevation = 4.dp,
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-                .clip(CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                shape = CircleShape,
-                color = Color(0xFFD8D8D8),
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    // Bolt icon — replace with your drawable
-                    //BoltShape(color = Color(0xFF1A1A1A))
-                }
-            }
+            LinkText(text = stringResource(com.uvitos.fastoutfit.R.string.i_have_account), onClick = onLoginClick)
         }
     }
 }
@@ -196,12 +142,12 @@ private fun PasswordStrengthIndicator(password: String) {
     if (password.isEmpty()) return
 
     val rules = listOf(
-        "Mínimo 8 caracteres"        to (password.length >= 8),
-        "Máximo 16 caracteres"       to (password.length <= 16),
-        "Al menos una mayúscula"     to password.any { it.isUpperCase() },
-        "Al menos una minúscula"     to password.any { it.isLowerCase() },
-        "Al menos un número"         to password.any { it.isDigit() },
-        "Al menos un signo (_-@*#\$!)" to password.any { it in "_-@*#\$!" }
+        stringResource(com.uvitos.fastoutfit.R.string.password_min_chars) to (password.length >= 8),
+        stringResource(com.uvitos.fastoutfit.R.string.password_max_chars) to (password.length <= 16),
+        stringResource(com.uvitos.fastoutfit.R.string.password_need_upper) to password.any { it.isUpperCase() },
+        stringResource(com.uvitos.fastoutfit.R.string.password_need_lower) to password.any { it.isLowerCase() },
+        stringResource(com.uvitos.fastoutfit.R.string.password_need_digit) to password.any { it.isDigit() },
+        stringResource(com.uvitos.fastoutfit.R.string.password_need_special) to password.any { it in "_-@*#\$!" }
     )
 
     val allValid = rules.all { it.second }

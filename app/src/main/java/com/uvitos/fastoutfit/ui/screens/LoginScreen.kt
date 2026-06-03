@@ -1,6 +1,5 @@
 package com.uvitos.fastoutfit.ui.screens
 
-import android.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.ui.components.*
@@ -81,7 +81,7 @@ fun LoginScreen(
 
             // ── Title ─────────────────────────────────────────────────────
             Text(
-                text = "FAST\nOUTFIT",
+                text = stringResource(com.uvitos.fastoutfit.R.string.app_title),
                 color = TextPrimary,
                 fontSize = 42.sp,
                 fontWeight = FontWeight.ExtraBold,
@@ -93,7 +93,7 @@ fun LoginScreen(
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = "LOGIN",
+                text = stringResource(com.uvitos.fastoutfit.R.string.login_title),
                 color = TextPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
@@ -106,7 +106,7 @@ fun LoginScreen(
             OutfitTextField(
                 value = email,
                 onValueChange = { email = it },
-                placeholder = "email",
+                placeholder = stringResource(com.uvitos.fastoutfit.R.string.email_placeholder),
             )
 
             Spacer(Modifier.height(12.dp))
@@ -114,7 +114,7 @@ fun LoginScreen(
             OutfitTextField(
                 value = password,
                 onValueChange = { password = it },
-                placeholder = "Password",
+                placeholder = stringResource(com.uvitos.fastoutfit.R.string.password_placeholder),
                 isPassword = true,
             )
 
@@ -133,137 +133,23 @@ fun LoginScreen(
             if (authState is AuthState.Loading){
                 CircularProgressIndicator()
             } else {
-                GoldButton(text = "LOG IN",
+                GoldButton(text = stringResource(com.uvitos.fastoutfit.R.string.log_in),
                     onClick = {onLoginClick(email, password)})
                 Spacer(Modifier.height(12.dp))
 
                 // Botón de google
                 OutlinedButton(onClick = onGoogleSignIn, modifier = Modifier.fillMaxWidth()) {
-                    Text("Continuar con Google", color = TextPrimary)
+                    Text(stringResource(com.uvitos.fastoutfit.R.string.continue_with_google), color = TextPrimary)
                 }
             }
 
             Spacer(Modifier.height(24.dp))
 
             // ── Bottom links ──────────────────────────────────────────────
-            LinkText(text = "I DONT HAVE AN ACCOUNT", onClick = onRegisterClick)
+            LinkText(text = stringResource(com.uvitos.fastoutfit.R.string.i_dont_have_account), onClick = onRegisterClick)
             Spacer(Modifier.height(8.dp))
-            LinkText(text = "I FORGOT MY PASSWORD", onClick = { showForgotDialog = true})
+            LinkText(text = stringResource(com.uvitos.fastoutfit.R.string.i_forgot_password), onClick = { showForgotDialog = true})
         }
     }
 }
 
-@Composable
-private fun LinkText(text: String, onClick: () -> Unit) {
-    TextButton(onClick = onClick) {
-        Text(
-            text = text,
-            color = TextSecondary,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            letterSpacing = 1.sp,
-            textDecoration = TextDecoration.Underline,
-        )
-    }
-}
-
-/** Shared metallic bolt logo used on Login & Register screens */
-@Composable
-fun BoltLogo(size: Int = 120) {
-    // Outer metallic ring
-    Surface(
-        modifier = Modifier.size(size.dp),
-        shape = CircleShape,
-        color = Color(0xFFB0B0B0),
-        shadowElevation = 12.dp,
-        tonalElevation = 4.dp,
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-                .clip(CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                shape = CircleShape,
-                color = Color(0xFFD8D8D8),
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    // Bolt icon — replace with your drawable
-                    //BoltShape(color = Color(0xFF1A1A1A))
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ForgotPasswordDialog(
-    onDismiss: () -> Unit,
-    onSend: (email: String) -> Unit,
-) {
-    var email by remember { mutableStateOf("") }
-    var sent  by remember { mutableStateOf(false) }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        containerColor = Color(0xFF1E1E1E),
-        title = {
-            Text(
-                text = "RESET PASSWORD",
-                color = TextPrimary,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 3.sp,
-            )
-        },
-        text = {
-            Column {
-                if (sent) {
-                    Text(
-                        text = "Correo enviado. Revisa tu bandeja de entrada.",
-                        color = TextSecondary,
-                        fontSize = 13.sp,
-                    )
-                } else {
-                    Text(
-                        text = "Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.",
-                        color = TextSecondary,
-                        fontSize = 13.sp,
-                    )
-                    Spacer(Modifier.height(16.dp))
-                    OutfitTextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        placeholder = "e-mail",
-                    )
-                }
-            }
-        },
-        confirmButton = {
-            if (sent) {
-                TextButton(onClick = onDismiss) {
-                    Text("CERRAR", color = GoldAccent, letterSpacing = 2.sp)
-                }
-            } else {
-                TextButton(onClick = {
-                    if (email.isNotBlank()) {
-                        sent = true
-                        onSend(email)
-                    }
-                }) {
-                    Text("ENVIAR", color = GoldAccent, letterSpacing = 2.sp)
-                }
-            }
-        },
-        dismissButton = {
-            if (!sent) {
-                TextButton(onClick = onDismiss) {
-                    Text("CANCELAR", color = TextSecondary, letterSpacing = 2.sp)
-                }
-            }
-        }
-    )
-}
