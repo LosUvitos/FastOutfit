@@ -1,5 +1,6 @@
 package com.uvitos.fastoutfit.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -8,20 +9,32 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.uvitos.fastoutfit.R
 import com.uvitos.fastoutfit.ui.theme.*
+import androidx.compose.runtime.setValue
+
 
 /**
  * Full-screen dark navy background.
@@ -31,10 +44,16 @@ import com.uvitos.fastoutfit.ui.theme.*
  */
 @Composable
 fun AppBackground(modifier: Modifier = Modifier, content: @Composable BoxScope.() -> Unit) {
+    Image(
+        painter = painterResource(R.drawable.background),
+        contentDescription = null,
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.Crop
+    )
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(BackgroundDark),
+            .background(Color(0x00FFFFFF)),
         content = content
     )
 }
@@ -48,7 +67,9 @@ fun OutfitTextField(
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
 ) {
-    val visualTransformation = if (isPassword)
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    val visualTransformation = if (isPassword && !passwordVisible)
         androidx.compose.ui.text.input.PasswordVisualTransformation()
     else
         androidx.compose.ui.text.input.VisualTransformation.None
@@ -60,6 +81,20 @@ fun OutfitTextField(
             Text(placeholder, color = InputText.copy(alpha = 0.5f))
         },
         visualTransformation = visualTransformation,
+        trailingIcon = {
+            if (isPassword){
+                IconButton(onClick = {passwordVisible = !passwordVisible}) {
+                    Icon(
+                        imageVector = if (passwordVisible)
+                            Icons.Filled.Visibility
+                        else
+                        Icons.Filled.VisibilityOff,
+                        contentDescription = if (passwordVisible) "Ocultar Contraseña" else "Mostrar contraseña",
+                        tint = InputText.copy(alpha = 0.6f)
+                    )
+                }
+            }
+        },
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp)),
@@ -83,7 +118,10 @@ object Routes {
     const val HOME     = "home"
     const val SHIRTS   = "shirts"
     const val ADD_ITEM = "add_item"
+    const val ADD_SCREEN_TEST = "add_screen_test"
     const val SETTINGS = "settings"
+
+    const val WARDROBE = "Wardrobe"
 }
 
 /** Gold pill button */

@@ -1,5 +1,6 @@
 package com.uvitos.fastoutfit.ui.screens
 
+import android.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.ui.components.*
 import com.uvitos.fastoutfit.ui.theme.*
+import com.uvitos.fastoutfit.ui.viewmodel.AuthState
 
 /**
  * LoginScreen
@@ -42,11 +44,27 @@ import com.uvitos.fastoutfit.ui.theme.*
 fun LoginScreen(
     onLoginClick: (name: String, password: String) -> Unit = { _, _ -> },
     onRegisterClick: () -> Unit = {},
-    onForgotPasswordClick: () -> Unit = {},
+    onForgotPasswordClick: (email: String) -> Unit = {},
+    authState: AuthState = AuthState.Idle,
+    onGoogleSignIn: () ->  Unit = {},
 ) {
-    var name     by remember { mutableStateOf("") }
+    var email     by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var showForgotDialog by remember { mutableStateOf(false) }
 
+    if (authState is AuthState.Error){
+        LaunchedEffect(authState) {
+            // Error se muestra en UI
+        }
+    }
+
+    if (showForgotDialog){
+        ForgotPasswordDialog(
+            onDismiss = { showForgotDialog = false},
+            onSend = {emailInput -> onForgotPasswordClick(emailInput)
+            showForgotDialog = false}
+        )
+    }
     AppBackground {
         Column(
             modifier = Modifier
@@ -86,9 +104,9 @@ fun LoginScreen(
 
             // ── Fields ────────────────────────────────────────────────────
             OutfitTextField(
-                value = "value",
-                onValueChange = { name = it },
-                placeholder = "name",
+                value = email,
+                onValueChange = { email = it },
+                placeholder = "email",
             )
 
             Spacer(Modifier.height(12.dp))
@@ -100,20 +118,37 @@ fun LoginScreen(
                 isPassword = true,
             )
 
+            // Mensaje de error
+            if (authState is AuthState.Error){
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = authState.message,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelSmall
+                )
+            }
+
             Spacer(Modifier.height(40.dp))
 
-            // ── Login button ──────────────────────────────────────────────
-            GoldButton(
-                text = "LOG IN",
-                onClick = { onLoginClick(name, password) },
-            )
+            if (authState is AuthState.Loading){
+                CircularProgressIndicator()
+            } else {
+                GoldButton(text = "LOG IN",
+                    onClick = {onLoginClick(email, password)})
+                Spacer(Modifier.height(12.dp))
+
+                // Botón de google
+                OutlinedButton(onClick = onGoogleSignIn, modifier = Modifier.fillMaxWidth()) {
+                    Text("Continuar con Google", color = TextPrimary)
+                }
+            }
 
             Spacer(Modifier.height(24.dp))
 
             // ── Bottom links ──────────────────────────────────────────────
             LinkText(text = "I DONT HAVE AN ACCOUNT", onClick = onRegisterClick)
             Spacer(Modifier.height(8.dp))
-            LinkText(text = "I FORGOT MY PASSWORD", onClick = onForgotPasswordClick)
+            LinkText(text = "I FORGOT MY PASSWORD", onClick = { showForgotDialog = true})
         }
     }
 }
@@ -162,4 +197,73 @@ fun BoltLogo(size: Int = 120) {
             }
         }
     }
+}
+
+@Composable
+private fun ForgotPasswordDialog(
+    onDismiss: () -> Unit,
+    onSend: (email: String) -> Unit,
+) {
+    var email by remember { mutableStateOf("") }
+    var sent  by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFF1E1E1E),
+        title = {
+            Text(
+                text = "RESET PASSWORD",
+                color = TextPrimary,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 3.sp,
+            )
+        },
+        text = {
+            Column {
+                if (sent) {
+                    Text(
+                        text = "Correo enviado. Revisa tu bandeja de entrada.",
+                        color = TextSecondary,
+                        fontSize = 13.sp,
+                    )
+                } else {
+                    Text(
+                        text = "Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.",
+                        color = TextSecondary,
+                        fontSize = 13.sp,
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    OutfitTextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        placeholder = "e-mail",
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            if (sent) {
+                TextButton(onClick = onDismiss) {
+                    Text("CERRAR", color = GoldAccent, letterSpacing = 2.sp)
+                }
+            } else {
+                TextButton(onClick = {
+                    if (email.isNotBlank()) {
+                        sent = true
+                        onSend(email)
+                    }
+                }) {
+                    Text("ENVIAR", color = GoldAccent, letterSpacing = 2.sp)
+                }
+            }
+        },
+        dismissButton = {
+            if (!sent) {
+                TextButton(onClick = onDismiss) {
+                    Text("CANCELAR", color = TextSecondary, letterSpacing = 2.sp)
+                }
+            }
+        }
+    )
 }
