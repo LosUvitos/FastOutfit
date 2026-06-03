@@ -195,35 +195,48 @@ fun BoltLogo2(size: Int = 120) {
 private fun PasswordStrengthIndicator(password: String) {
     if (password.isEmpty()) return
 
-    val checks = listOf(
-        password.length >= 8,
-        password.length <= 16,
-        password.any { it.isUpperCase() },
-        password.any { it.isLowerCase() },
-        password.any { it.isDigit() },
-        password.any { it in "_-@*#\$!" }
+    val rules = listOf(
+        "Mínimo 8 caracteres"        to (password.length >= 8),
+        "Máximo 16 caracteres"       to (password.length <= 16),
+        "Al menos una mayúscula"     to password.any { it.isUpperCase() },
+        "Al menos una minúscula"     to password.any { it.isLowerCase() },
+        "Al menos un número"         to password.any { it.isDigit() },
+        "Al menos un signo (_-@*#\$!)" to password.any { it in "_-@*#\$!" }
     )
-    val strength = checks.count { it }
-    val (color, label) = when {
-        strength <= 2 -> Color(0xFFE53935) to "Débil"
-        strength <= 4 -> Color(0xFFFFA726) to "Regular"
-        strength == 5 -> Color(0xFFFFEE58) to "Buena"
-        else          -> Color(0xFF66BB6A) to "Fuerte"
-    }
 
-    Column(modifier = Modifier.fillMaxWidth().padding(start = 4.dp, top = 4.dp)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            repeat(6) { index ->
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(4.dp)
-                        .clip(RoundedCornerShape(2.dp))
-                        .background(if (index < strength) color else Color.Gray.copy(alpha = 0.3f))
-                )
+    val allValid = rules.all { it.second }
+    if (allValid) return
+
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 6.dp),
+        shape = RoundedCornerShape(10.dp),
+        color = Color(0x1F2933),
+        tonalElevation = 4.dp,
+        shadowElevation = 4.dp,
+
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+            rules.forEach { (label, passed) ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = 2.dp)
+                ) {
+                    Text(
+                        text = if (passed) "✓" else "✗",
+                        color = if (passed) Color(0xFF66BB6A) else Color(0xFFE53935),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = label,
+                        color = if (passed) Color(0xFF66BB6A) else TextSecondary,
+                        fontSize = 14.sp,
+                    )
+                }
             }
         }
-        Spacer(Modifier.height(2.dp))
-        Text(label, color = color, fontSize = 11.sp, letterSpacing = 1.sp)
     }
 }
