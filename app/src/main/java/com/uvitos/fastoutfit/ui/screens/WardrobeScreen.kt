@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.R
 import com.uvitos.fastoutfit.ui.components.AppBackground
 import com.uvitos.fastoutfit.ui.components.GarmentPlaceholderCard
+import com.uvitos.fastoutfit.ui.components.TopBarWithHelpHomeProfile
 import com.uvitos.fastoutfit.ui.components.WardrobeTabBar
 import com.uvitos.fastoutfit.ui.theme.*
 
@@ -89,8 +91,7 @@ fun WardrobeScreen(
                 .systemBarsPadding(),
         ) {
 
-            // Top bar
-            WardrobeTopBar(
+            TopBarWithHelpHomeProfile(
                 onHelpClick    = onHelpClick,
                 onHomeClick    = onHomeClick,
                 onProfileClick = onProfileClick,
@@ -140,57 +141,6 @@ fun WardrobeScreen(
     }
 }
 
-// Top bar
-
-@Composable
-private fun WardrobeTopBar(
-    onHelpClick:    () -> Unit,
-    onHomeClick:    () -> Unit,
-    onProfileClick: () -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 12.dp),
-    ) {
-        IconButton(
-            onClick  = onHelpClick,
-            modifier = Modifier.align(Alignment.CenterStart),
-        ) {
-            Icon(
-                painter            = painterResource(R.drawable.ic_help),
-                contentDescription = "Help",
-                tint               = TextPrimary,
-                modifier           = Modifier.size(28.dp),
-            )
-        }
-
-        IconButton(
-            onClick  = onHomeClick,
-            modifier = Modifier.align(Alignment.Center),
-        ) {
-            Icon(
-                imageVector        = Icons.Filled.Home,
-                contentDescription = "Home",
-                tint               = GoldAccent,
-                modifier           = Modifier.size(34.dp),
-            )
-        }
-
-        IconButton(
-            onClick  = onProfileClick,
-            modifier = Modifier.align(Alignment.CenterEnd),
-        ) {
-            Icon(
-                painter            = painterResource(R.drawable.ic_profile),
-                contentDescription = "Profile",
-                tint               = TextPrimary,
-                modifier           = Modifier.size(28.dp),
-            )
-        }
-    }
-}
-
 // Filter + Add bar
 
 @Composable
@@ -220,7 +170,7 @@ private fun FilterAddBar(
             )
             Spacer(Modifier.width(4.dp))
             Text(
-                text          = "FILTER",
+                text          = stringResource(com.uvitos.fastoutfit.R.string.filter),
                 fontSize      = 11.sp,
                 fontWeight    = FontWeight.SemiBold,
                 letterSpacing = 1.sp,
@@ -231,7 +181,7 @@ private fun FilterAddBar(
         IconButton(onClick = onAddClick) {
             Icon(
                 imageVector        = Icons.Filled.Add,
-                contentDescription = "Add garment",
+                contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_add_garment),
                 tint               = TextPrimary,
                 modifier           = Modifier.size(28.dp),
             )
@@ -269,7 +219,7 @@ private fun GarmentCard(
             ) {
                 Icon(
                     painter        = painterResource(R.drawable.ic_fav),
-                    contentDescription = "Favorite",
+                    contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_favorite),
                     tint               = GoldAccent,
                     modifier           = Modifier.size(18.dp),
                 )
@@ -281,7 +231,7 @@ private fun GarmentCard(
             ) {
                 Icon(
                     painter        = painterResource(R.drawable.ic_trash),
-                    contentDescription = "Delete",
+                    contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_delete),
                     tint               = TextSecondary,
                     modifier           = Modifier.size(18.dp),
                 )
@@ -290,55 +240,7 @@ private fun GarmentCard(
     }
 }
 
-// tabs
 
-// ---------------------------DISEÑO ANTERIOR DE LOS TABS INFERIORES--------------------------------
-/*@Composable
-private fun WardrobeBottomTabs(
-    selected: ClothingCategory,
-    onSelect: (ClothingCategory) -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(GoldAccent.copy(alpha = 0.15f))
-            .padding(vertical = 4.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment     = Alignment.CenterVertically,
-    ) {
-        ClothingCategory.entries.forEach { category ->
-            val isSelected = category == selected
-            TextButton(
-                onClick = { onSelect(category) },
-                modifier = Modifier.weight(1f),
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    // Indicador activo
-                    if (isSelected) {
-                        Box(
-                            modifier = Modifier
-                                .width(24.dp)
-                                .height(3.dp)
-                                .background(
-                                    color = GoldAccent,
-                                    shape = RoundedCornerShape(2.dp),
-                                )
-                        )
-                        Spacer(Modifier.height(2.dp))
-                    }
-                    Text(
-                        text          = category.label,
-                        color         = if (isSelected) GoldAccent else TextSecondary,
-                        fontSize      = 10.sp,
-                        fontWeight    = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                        letterSpacing = 1.sp,
-                    )
-                }
-            }
-        }
-    }
-}*/
-//--------------------------------------------------------------------------------------------------
 
 @Preview(
     name           = "Wardrobe Screen – Dark",

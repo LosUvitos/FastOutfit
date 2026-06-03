@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.uvitos.fastoutfit.ui.theme.AccentMain
 
@@ -37,7 +38,7 @@ fun BottomNavigationComponent(
         ) {
             Icon(
                 imageVector = Icons.Default.Dashboard,
-                contentDescription = "Wardrobe",
+                contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_wardrobe),
                 tint = iconColor,
                 modifier = Modifier.size(28.dp)
             )

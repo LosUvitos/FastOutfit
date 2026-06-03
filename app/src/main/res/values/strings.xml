@@ -1,3 +1,79 @@
 <resources>
     <string name="app_name">FastOutfit</string>
+    <string name="google_sign_in_server_client_id" translatable="false">224385322991-vs86n6b67pv7r8qh9vqevg95q40cfodb.apps.googleusercontent.com</string>
+
+    <!-- Auth screens -->
+    <string name="app_title">FAST\nOUTFIT</string>
+    <string name="login_title">LOGIN</string>
+    <string name="register_title">REGISTER</string>
+    <string name="log_in">LOG IN</string>
+    <string name="register">REGISTER</string>
+    <string name="continue_with_google">Continuar con Google</string>
+    <string name="i_dont_have_account">I DONT HAVE AN ACCOUNT</string>
+    <string name="i_have_account">I HAVE AN ACCOUNT</string>
+    <string name="i_forgot_password">I FORGOT MY PASSWORD</string>
+    <string name="password_placeholder">Password</string>
+    <string name="email_placeholder">e-mail</string>
+    <string name="name_placeholder">name</string>
+    <string name="confirm_password_placeholder">Confirm Password</string>
+    <string name="passwords_dont_match">Las contraseñas no coinciden</string>
+
+    <!-- Password reset dialog -->
+    <string name="reset_password_title">RESET PASSWORD</string>
+    <string name="reset_password_message">Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.</string>
+    <string name="reset_password_sent">Correo enviado. Revisa tu bandeja de entrada.</string>
+    <string name="send">ENVIAR</string>
+    <string name="cancel">CANCELAR</string>
+    <string name="close">CERRAR</string>
+
+    <!-- Password strength -->
+    <string name="password_min_chars">Mínimo 8 caracteres</string>
+    <string name="password_max_chars">Máximo 16 caracteres</string>
+    <string name="password_need_upper">Al menos una mayúscula</string>
+    <string name="password_need_lower">Al menos una minúscula</string>
+    <string name="password_need_digit">Al menos un número</string>
+    <string name="password_need_special">Al menos un signo (_-@*#\$!)</string>
+
+    <!-- Home -->
+    <string name="welcome_message">BIENVENIDO, %s</string>
+    <string name="outfit_of_day">Outfit del día</string>
+
+    <!-- Settings -->
+    <string name="settings_profile">PROFILE</string>
+    <string name="settings_security">SECURITY</string>
+    <string name="settings_notifications">NOTIFICATIONS</string>
+    <string name="settings_privacy">PRIVACY</string>
+    <string name="settings_appearance">APPEARANCE</string>
+    <string name="settings_language">LANGUAGE</string>
+    <string name="settings_storage">STORAGE</string>
+    <string name="settings_policies">POLICIES</string>
+    <string name="settings_about_us">ABOUT US</string>
+    <string name="settings_log_out">LOG OUT</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_settings">Settings</string>
+    <string name="cd_profile">Profile</string>
+    <string name="cd_home">Home</string>
+    <string name="cd_wardrobe">Wardrobe</string>
+    <string name="cd_add_garment">Add new garment</string>
+    <string name="cd_shuffle">Shuffle outfit</string>
+    <string name="cd_favorite">Add to favorites</string>
+    <string name="cd_help">Help</string>
+    <string name="cd_delete">Delete</string>
+
+    <!-- Errors -->
+    <string name="error_empty_fields">Los campos no pueden ser vacios</string>
+    <string name="error_login">Error al iniciar sesión</string>
+    <string name="error_register">Error al intentar registrarse</string>
+    <string name="error_password_mismatch">Las contraseñas no coinciden</string>
+    <string name="error_google_signin">Error con google</string>
+    <string name="error_reset_password_email">Ingresa tu correo electrónico</string>
+    <string name="error_reset_password_send">Error al enviar el correo de reestablecimiento</string>
+    <string name="password_need_upper_error">Debe tener al menos una mayúscula</string>
+    <string name="password_need_lower_error">Debe tener al menos una minúscula</string>
+    <string name="password_need_digit_error">Debe tener al menos un número</string>
+    <string name="password_need_special_error">Debe tener al menos un signo (_-@*#\$!)</string>
+
+    <!-- Wardrobe -->
+    <string name="filter">FILTER</string>
 </resources>

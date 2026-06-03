@@ -27,7 +27,9 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -111,19 +113,6 @@ fun OutfitTextField(
     )
 }
 
-object Routes {
-    const val SPLASH   = "splash"
-    const val LOGIN    = "login"
-    const val REGISTER = "register"
-    const val HOME     = "home"
-    const val SHIRTS   = "shirts"
-    const val ADD_ITEM = "add_item"
-    const val ADD_SCREEN_TEST = "add_screen_test"
-    const val SETTINGS = "settings"
-
-    const val WARDROBE = "Wardrobe"
-}
-
 /** Gold pill button */
 @Composable
 fun GoldButton(
@@ -181,7 +170,7 @@ fun FastOutfitTopBar(
         IconButton(onClick = onHomeClick) {
             Icon(
                 imageVector = Icons.Filled.Home,
-                contentDescription = "Home",
+                contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_home),
                 tint = GoldAccent,
                 modifier = Modifier.size(36.dp)
             )
@@ -198,11 +187,171 @@ fun FastOutfitTopBar(
             ) {
                 Icon(
                     imageVector = Icons.Filled.AccountCircle,
-                    contentDescription = "Profile",
+                    contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_profile),
                     tint = TextPrimary,
                     modifier = Modifier.size(32.dp)
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun BoltLogo(size: Int = 120) {
+    Surface(
+        modifier = Modifier.size(size.dp),
+        shape = CircleShape,
+        color = Color(0xFFB0B0B0),
+        shadowElevation = 12.dp,
+        tonalElevation = 4.dp,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+                .clip(CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                shape = CircleShape,
+                color = Color(0xFFD8D8D8),
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun LinkText(text: String, onClick: () -> Unit) {
+    TextButton(onClick = onClick) {
+        Text(
+            text = text,
+            color = TextSecondary,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            letterSpacing = 1.sp,
+            textDecoration = TextDecoration.Underline,
+        )
+    }
+}
+
+@Composable
+fun ForgotPasswordDialog(
+    onDismiss: () -> Unit,
+    onSend: (email: String) -> Unit,
+) {
+    var email by remember { mutableStateOf("") }
+    var sent  by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFF1E1E1E),
+        title = {
+            Text(
+                text = stringResource(com.uvitos.fastoutfit.R.string.reset_password_title),
+                color = TextPrimary,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 3.sp,
+            )
+        },
+        text = {
+            Column {
+                if (sent) {
+                    Text(
+                        text = stringResource(com.uvitos.fastoutfit.R.string.reset_password_sent),
+                        color = TextSecondary,
+                        fontSize = 13.sp,
+                    )
+                } else {
+                    Text(
+                        text = stringResource(com.uvitos.fastoutfit.R.string.reset_password_message),
+                        color = TextSecondary,
+                        fontSize = 13.sp,
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    OutfitTextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        placeholder = stringResource(com.uvitos.fastoutfit.R.string.email_placeholder),
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            if (sent) {
+                TextButton(onClick = onDismiss) {
+                    Text(stringResource(com.uvitos.fastoutfit.R.string.close), color = GoldAccent, letterSpacing = 2.sp)
+                }
+            } else {
+                TextButton(onClick = {
+                    if (email.isNotBlank()) {
+                        sent = true
+                        onSend(email)
+                    }
+                }) {
+                    Text(stringResource(com.uvitos.fastoutfit.R.string.send), color = GoldAccent, letterSpacing = 2.sp)
+                }
+            }
+        },
+        dismissButton = {
+            if (!sent) {
+                TextButton(onClick = onDismiss) {
+                    Text(stringResource(com.uvitos.fastoutfit.R.string.cancel), color = TextSecondary, letterSpacing = 2.sp)
+                }
+            }
+        }
+    )
+}
+
+@Composable
+fun TopBarWithHelpHomeProfile(
+    onHelpClick:    () -> Unit = {},
+    onHomeClick:    () -> Unit = {},
+    onProfileClick: () -> Unit = {},
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 12.dp),
+    ) {
+        IconButton(
+            onClick  = onHelpClick,
+            modifier = Modifier.align(Alignment.CenterStart),
+        ) {
+            Icon(
+                painter            = painterResource(R.drawable.ic_help),
+                contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_help),
+                tint               = TextPrimary,
+                modifier           = Modifier.size(28.dp),
+            )
+        }
+
+        IconButton(
+            onClick  = onHomeClick,
+            modifier = Modifier.align(Alignment.Center),
+        ) {
+            Icon(
+                imageVector        = Icons.Filled.Home,
+                contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_home),
+                tint               = GoldAccent,
+                modifier           = Modifier.size(34.dp),
+            )
+        }
+
+        IconButton(
+            onClick  = onProfileClick,
+            modifier = Modifier.align(Alignment.CenterEnd),
+        ) {
+            Icon(
+                painter            = painterResource(R.drawable.ic_profile),
+                contentDescription = stringResource(com.uvitos.fastoutfit.R.string.cd_profile),
+                tint               = TextPrimary,
+                modifier           = Modifier.size(28.dp),
+            )
         }
     }
 }

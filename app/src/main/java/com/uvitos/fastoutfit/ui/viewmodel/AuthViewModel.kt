@@ -90,6 +90,19 @@ class AuthViewModel : ViewModel() {
         _authState.value = AuthState.Idle
     }
 
+    fun signOutWithGoogle(context: android.content.Context){
+        val credentialManager = androidx.credentials.CredentialManager.create(context)
+        viewModelScope.launch {
+            try {
+                credentialManager.clearCredentialState(
+                    androidx.credentials.ClearCredentialStateRequest()
+                )
+            } catch (_: Exception) { }
+        }
+        auth.signOut()
+        _authState.value = AuthState.Idle
+    }
+
     fun sendPasswordReset(email: String){
         if (email.isBlank()){
             _resetState.value = AuthState.Error("Ingresa tu correo electrónico")

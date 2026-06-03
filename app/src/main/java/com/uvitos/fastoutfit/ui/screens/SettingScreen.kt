@@ -13,10 +13,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uvitos.fastoutfit.R
 import com.uvitos.fastoutfit.ui.components.AppBackground
+import com.uvitos.fastoutfit.ui.components.TopBarWithHelpHomeProfile
 import com.uvitos.fastoutfit.ui.theme.*
 
 @Composable
@@ -39,7 +41,7 @@ fun SettingsScreen(
         Column(modifier = Modifier.fillMaxSize()) {
 
 
-            SettingsTopBar(
+            TopBarWithHelpHomeProfile(
                 onHelpClick    = onHelpClick,
                 onHomeClick    = onHomeClick,
                 onProfileClick = onProfileClick,
@@ -55,15 +57,15 @@ fun SettingsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                SettingsItem(label = "PROFILE",       onClick = onEditProfileClick)
-                SettingsItem(label = "SECURITY",      onClick = onSecurityClick)
-                SettingsItem(label = "NOTIFICATIONS", onClick = onNotificationsClick)
-                SettingsItem(label = "PRIVACY",       onClick = onPrivacyClick)
-                SettingsItem(label = "APPEARANCE",    onClick = onAppearanceClick)
-                SettingsItem(label = "LANGUAGE",      onClick = onLanguageClick)
-                SettingsItem(label = "STORAGE",       onClick = onStorageClick)
-                SettingsItem(label = "POLICIES",      onClick = onPoliciesClick)
-                SettingsItem(label = "ABOUT US",      onClick = onAboutUsClick)
+                SettingsItem(label = stringResource(com.uvitos.fastoutfit.R.string.settings_profile),       onClick = onEditProfileClick)
+                SettingsItem(label = stringResource(com.uvitos.fastoutfit.R.string.settings_security),      onClick = onSecurityClick)
+                SettingsItem(label = stringResource(com.uvitos.fastoutfit.R.string.settings_notifications), onClick = onNotificationsClick)
+                SettingsItem(label = stringResource(com.uvitos.fastoutfit.R.string.settings_privacy),       onClick = onPrivacyClick)
+                SettingsItem(label = stringResource(com.uvitos.fastoutfit.R.string.settings_appearance),    onClick = onAppearanceClick)
+                SettingsItem(label = stringResource(com.uvitos.fastoutfit.R.string.settings_language),      onClick = onLanguageClick)
+                SettingsItem(label = stringResource(com.uvitos.fastoutfit.R.string.settings_storage),       onClick = onStorageClick)
+                SettingsItem(label = stringResource(com.uvitos.fastoutfit.R.string.settings_policies),      onClick = onPoliciesClick)
+                SettingsItem(label = stringResource(com.uvitos.fastoutfit.R.string.settings_about_us),      onClick = onAboutUsClick)
 
                 Spacer(Modifier.height(12.dp))
 
@@ -76,7 +78,7 @@ fun SettingsScreen(
                 Spacer(Modifier.height(4.dp))
 
                 SettingsItem(
-                    label     = "LOG OUT",
+                    label     = stringResource(com.uvitos.fastoutfit.R.string.settings_log_out),
                     onClick   = onLogOutClick,
                     textColor = GoldAccent,
                 )
@@ -84,59 +86,6 @@ fun SettingsScreen(
         }
     }
 }
-
-@Composable
-private fun SettingsTopBar(
-    onHelpClick:    () -> Unit,
-    onHomeClick:    () -> Unit,
-    onProfileClick: () -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 16.dp),
-    ) {
-
-        IconButton(
-            onClick  = onHelpClick,
-            modifier = Modifier.align(Alignment.CenterStart),
-        ) {
-            Icon(
-                painter            = painterResource(R.drawable.ic_help),
-                contentDescription = "Help",
-                tint               = TextPrimary,
-                modifier           = Modifier.size(28.dp),
-            )
-        }
-
-
-        IconButton(
-            onClick  = onHomeClick,
-            modifier = Modifier.align(Alignment.Center),
-        ) {
-            Icon(
-                imageVector        = Icons.Filled.Home,
-                contentDescription = "Home",
-                tint               = GoldAccent,
-                modifier           = Modifier.size(34.dp),
-            )
-        }
-
-
-        IconButton(
-            onClick  = onProfileClick,
-            modifier = Modifier.align(Alignment.CenterEnd),
-        ) {
-            Icon(
-                painter            = painterResource(R.drawable.ic_profile),
-                contentDescription = "Profile",
-                tint               = TextPrimary,
-                modifier           = Modifier.size(28.dp),
-            )
-        }
-    }
-}
-
 
 @Composable
 private fun SettingsItem(
