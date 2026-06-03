@@ -118,6 +118,7 @@ object Routes {
     const val HOME     = "home"
     const val SHIRTS   = "shirts"
     const val ADD_ITEM = "add_item"
+    const val ADD_SCREEN_TEST = "add_screen_test"
     const val SETTINGS = "settings"
 
     const val WARDROBE = "Wardrobe"

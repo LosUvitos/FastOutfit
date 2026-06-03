@@ -29,3 +29,5 @@ val InputBackground = Color(0xFFF0F0F0)
 val InputText = Color(0xFF333333)
 val IconTint = Color(0xFF3A4560)
 val FrameBorder = Color(0xFFC49A4A)
+
+val Negrito = Color(0xff000000)

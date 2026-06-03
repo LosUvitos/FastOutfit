@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.uvitos.fastoutfit.ui.screens.SplashScreen  // corregido
 import com.google.firebase.auth.FirebaseAuth
 import com.uvitos.fastoutfit.ui.components.Routes
+import com.uvitos.fastoutfit.ui.screens.AddScreen
 import com.uvitos.fastoutfit.ui.screens.LoginScreen
 import com.uvitos.fastoutfit.ui.screens.HomeScreen
 import com.uvitos.fastoutfit.ui.screens.RegisterScreen
@@ -19,6 +20,7 @@ import com.uvitos.fastoutfit.ui.screens.SettingsScreen
 import com.uvitos.fastoutfit.ui.viewmodel.AuthState
 import com.uvitos.fastoutfit.ui.viewmodel.AuthViewModel
 import com.uvitos.fastoutfit.ui.screens.WardrobeScreen
+import com.uvitos.fastoutfit.ui.screens.addScreenTest
 
 @Composable
 fun FastOutfitNavGraph() {
@@ -86,7 +88,7 @@ fun FastOutfitNavGraph() {
                 onProfileClick = { /* TODO: Navigate to profile */ },
                 onShuffleClick = { /* TODO: Generate new outfit */ },
                 onFavoriteClick = { /* TODO: Save outfit to favorites */ },
-                onAddGarmentClick = { /* TODO: Navigate to add garment */ },
+                onAddGarmentClick = { navController.navigate(Routes.ADD_ITEM) },
                 onWardrobeClick = { navController.navigate(Routes.WARDROBE) }
             )
         }
@@ -110,10 +112,21 @@ fun FastOutfitNavGraph() {
                 onHomeClick    = { navController.navigate(Routes.HOME) },
                 onHelpClick    = { /* TODO: ayuda */ },
                 onProfileClick = { /* TODO: perfil */ },
-                onAddClick     = { category -> /* TODO: agregar prenda en $category */ },
+                onAddClick     = { navController.navigate(Routes.ADD_ITEM)},
                 onFilterClick  = { category -> /* TODO: filtrar $category */ },
                 onFavoriteClick = { garment -> /* TODO: marcar favorito ${garment.id} */ },
                 onDeleteClick   = { garment -> /* TODO: eliminar ${garment.id} */ },
+            )
+        }
+
+        composable(Routes.ADD_ITEM) {
+            AddScreen(
+                onHomeClick = {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.ADD_ITEM) {inclusive = true}
+                    }
+                },
+                onHelpClick = {}
             )
         }
     }
