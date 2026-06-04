@@ -23,11 +23,13 @@ import com.uvitos.fastoutfit.ui.viewmodel.AuthViewModel
 import com.uvitos.fastoutfit.ui.screens.WardrobeScreen
 import kotlinx.coroutines.launch
 import com.uvitos.fastoutfit.ui.screens.addScreenTest
+import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModel
 
 @Composable
 fun FastOutfitNavGraph() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = viewModel()
+    val clothingViewModel: ClothingViewModel = viewModel()
     val authState by authViewModel.authState.collectAsState()
 
     val startDestination = if (authViewModel.isUserLoggedIn) Routes.HOME else Routes.SPLASH
@@ -176,7 +178,12 @@ fun FastOutfitNavGraph() {
                         popUpTo(Routes.ADD_ITEM) {inclusive = true}
                     }
                 },
-                onHelpClick = {}
+                onHelpClick = {},
+                onOkayClick = {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.ADD_ITEM) {inclusive = true}
+                    }
+                }
             )
         }
     }

@@ -10,15 +10,19 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.uvitos.fastoutfit.R
 import com.uvitos.fastoutfit.navigation.Categories
 import com.uvitos.fastoutfit.ui.components.AppBackground
 import com.uvitos.fastoutfit.ui.components.GarmentPlaceholderCard
 import com.uvitos.fastoutfit.ui.components.ImagePicker
 import com.uvitos.fastoutfit.ui.theme.*
+import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModel
 
 
 @Composable
@@ -28,6 +32,7 @@ fun AddScreen(
 
     onOkayClick:      () -> Unit = {},
     onDeleteClick:    () -> Unit = {},
+    viewModel: ClothingViewModel = viewModel()
 ) {
     AppBackground {
 
@@ -43,6 +48,7 @@ fun AddScreen(
             AdditionCard(
                 onOkayClick = onOkayClick,
                 onCancelClick = onDeleteClick,
+                viewModel = viewModel
             )
         }
 
@@ -55,7 +61,6 @@ fun AddScreen(
 private fun AddTopBar(
     onHelpClick:    () -> Unit,
     onHomeClick:    () -> Unit,
-
 ) {
     Box(
         modifier = Modifier
@@ -94,12 +99,15 @@ private fun AddTopBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AdditionCard(
-
     onOkayClick: () -> Unit,
-    onCancelClick: () -> Unit
+    onCancelClick: () -> Unit,
+    viewModel: ClothingViewModel = viewModel()
 ) {
+
+    val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var name by remember { mutableStateOf("") }
+
     val options = Categories.all
     var selected by remember { mutableStateOf(options[0]) }
     var expanded by remember { mutableStateOf(false) }
@@ -154,7 +162,20 @@ private fun AdditionCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(
-                onClick = onOkayClick,
+                onClick = {
+                    val currentUri = imageUri
+
+                    if (name.isBlank()) return@IconButton
+                    if (currentUri == null) return@IconButton
+
+
+                    viewModel.saveClothingItem(
+                        context = context,
+                        imageUri = currentUri,
+                        name = name,
+                        category = selected
+                    )
+                    onOkayClick()},
                 modifier = Modifier.size(64.dp),
             ) {
                 Icon(
