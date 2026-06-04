@@ -151,17 +151,22 @@ La prenda deja de aparecer en el armario y en los outfits asociados
 ### RF-10: Recomendación automática de outfits
 Descripción:
 El sistema debe generar automáticamente una sugerencia de outfit diario combinando prendas del armario del usuario.
-Entradas:
 
+Entradas:
 Prendas registradas en el armario del usuario
-Solicitud manual del usuario o apertura diaria de la aplicación
+Solicitud manual del usuario mediante un botón "Nuevo outfit" en la pantalla principal
 
 Procesamiento:
-El sistema selecciona una combinación de prendas de distintas categorías siguiendo criterios de compatibilidad por color y categoría. La recomendación automática se genera una vez por día; el usuario puede solicitar una nueva manualmente en cualquier momento.
+El sistema selecciona una combinación de hasta 4 prendas (1 superior, 1 inferior, 1 calzado, 1 accesorio) siguiendo estos criterios de compatibilidad:
+- No seleccionar dos prendas de la misma categoría en el mismo outfit
+- Priorizar combinaciones donde los colores principales sean complementarios (circuito de color: colores opuestos) o análogos (colores adyacentes)
+- Si no hay prendas de colores complementarios/análogos, seleccionar aleatoriamente respetando la regla de categorías distintas
+
+La recomendación automática se genera exclusivamente cuando el usuario presiona el botón "Nuevo outfit" en la pantalla principal. No se genera automáticamente al abrir la aplicación.
 
 Salidas:
-Outfit recomendado con visualización de las prendas seleccionadas
-Mensaje informativo si el armario no tiene prendas suficientes para generar una combinación
+Outfit recomendado con visualización de hasta 4 prendas seleccionadas (una por categoría) mostrando imagen, nombre y categoría de cada una
+Mensaje informativo "Armario insuficiente" si el usuario tiene menos de 2 prendas de categorías distintas
 
 
 ### RF-11: Creación manual de outfits
@@ -215,14 +220,15 @@ Descripción:
 El sistema debe enviar una notificación local diaria al usuario recordándole consultar el outfit recomendado para ese día.
 
 Entradas:
-Configuración de notificaciones activada por el usuario
+Configuración de notificaciones activada por el usuario desde la pantalla de Ajustes
+Hora seleccionada por el usuario (configurable en Ajustes → Notificaciones, valor por defecto: 09:00)
 
 Procesamiento:
-El sistema programa una notificación local para ser enviada una vez al día en un horario fijo. La notificación se genera únicamente si el usuario ha concedido los permisos correspondientes.
+El sistema programa una notificación local usando AlarmManager para ser enviada una vez al día a la hora configurada por el usuario (por defecto 09:00). Si el usuario cambia la hora, se reprograma la notificación. La notificación se genera únicamente si el usuario ha concedido los permisos POST_NOTIFICATIONS (Android 13+) y la tiene habilitada en Ajustes. Al desactivarla, se cancela la alarma programada.
 
 Salidas:
-Notificación visible en el panel de notificaciones del dispositivo
-Al seleccionar la notificación, el usuario es dirigido directamente a la sección de recomendación de outfits
+Notificación visible en el panel de notificaciones del dispositivo a la hora configurada
+Al seleccionar la notificación, el usuario es dirigido directamente a la pantalla principal (sección de recomendación de outfits)
 
 # Requerimientos No Funcionales
 

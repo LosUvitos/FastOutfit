@@ -16,6 +16,7 @@ import com.uvitos.fastoutfit.navigation.Routes
 import com.uvitos.fastoutfit.ui.screens.AddScreen
 import com.uvitos.fastoutfit.ui.screens.LoginScreen
 import com.uvitos.fastoutfit.ui.screens.HomeScreen
+import com.uvitos.fastoutfit.ui.screens.NotificationsScreen
 import com.uvitos.fastoutfit.ui.screens.RegisterScreen
 import com.uvitos.fastoutfit.ui.screens.SettingsScreen
 import com.uvitos.fastoutfit.ui.viewmodel.AuthState
@@ -35,6 +36,7 @@ fun FastOutfitNavGraph() {
     NavHost(
         navController = navController,
         startDestination = startDestination  // corregido: usa la variable
+
     ) {
 
         composable(Routes.SPLASH) {
@@ -153,7 +155,9 @@ fun FastOutfitNavGraph() {
                 },
                 onHomeClick = {
                     navController.popBackStack()
-            }
+            },
+
+                onNotificationsClick = {navController.navigate(Routes.NOTIFICATIONS)}
             )
         }
 
@@ -177,6 +181,12 @@ fun FastOutfitNavGraph() {
                     }
                 },
                 onHelpClick = {}
+            )
+        }
+
+        composable(Routes.NOTIFICATIONS){
+            NotificationsScreen (
+                onBackClick = {navController.popBackStack()}
             )
         }
     }

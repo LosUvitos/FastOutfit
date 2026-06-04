@@ -9,4 +9,5 @@ object Routes {
     const val ADD_ITEM = "add_item"
     const val SETTINGS = "settings"
     const val WARDROBE = "Wardrobe"
+    const val NOTIFICATIONS = "notifications"
 }
