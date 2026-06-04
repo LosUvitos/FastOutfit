@@ -141,7 +141,7 @@ fun FastOutfitNavGraph() {
         composable(Routes.HOME) {
             HomeScreen(
 
-                userName = FirebaseAuth.getInstance().currentUser?.email ?: "USUARIO",
+                userName = authViewModel.currentUserName,
                 onSettingsClick = { navController.navigate(Routes.SETTINGS) },
                 onProfileClick = { navController.navigate(Routes.USER) },
                 onShuffleClick = { clothingViewModel.generateRandomOutfit() },
