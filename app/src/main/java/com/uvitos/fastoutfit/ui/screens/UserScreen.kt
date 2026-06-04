@@ -14,17 +14,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.uvitos.fastoutfit.ui.components.AppBackground
 import com.uvitos.fastoutfit.ui.components.GoldButton
 import com.uvitos.fastoutfit.ui.components.TopBarWithHelpHomeProfile
 import com.uvitos.fastoutfit.ui.components.TopBarWithHelpHomeSettings
 import com.uvitos.fastoutfit.ui.components.UserInfoCard
 import com.uvitos.fastoutfit.ui.theme.TextPrimary
+import com.google.firebase.auth.FirebaseAuth
+import com.uvitos.fastoutfit.ui.components.ForgotPasswordDialog
+import com.uvitos.fastoutfit.ui.viewmodel.AuthViewModel
 
 @Composable
 fun UserScreen(
     userName: String = "EXAMPLE",
-    userEmail: String = "EXAMPLE@email.com",
 
     onHelpClick: () -> Unit = {},
     onHomeClick: () -> Unit = {},
@@ -32,13 +35,36 @@ fun UserScreen(
 
     onEditNameClick: () -> Unit = {},
     onShowEmailClick: () -> Unit = {},
-    onChangePasswordClick: () -> Unit = {},
 
     onSaveClick: () -> Unit = {}
+
 ) {
+
+    val authViewModel: AuthViewModel = viewModel()
+
+    var showResetDialog by remember {
+        mutableStateOf(false)
+    }
 
     var emailVisible by remember {
         mutableStateOf(false)
+    }
+
+    val currentUser = FirebaseAuth.getInstance().currentUser
+
+    val userEmail = currentUser?.email ?: "Correo no disponible"
+
+    if (showResetDialog) {
+
+        ForgotPasswordDialog(
+            onDismiss = {
+                showResetDialog = false
+            },
+
+            onSend = { email ->
+                authViewModel.sendPasswordReset(email)
+            }
+        )
     }
 
     AppBackground {
@@ -110,7 +136,9 @@ fun UserScreen(
                 title = "Contraseña",
                 value = "••••••••••••",
                 actionIcon = Icons.Default.Edit,
-                onActionClick = onChangePasswordClick
+                onActionClick = {
+                    showResetDialog = true
+                }
             )
 
             Spacer(modifier = Modifier.weight(1f))
