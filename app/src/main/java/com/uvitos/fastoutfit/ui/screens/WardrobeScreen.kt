@@ -31,14 +31,6 @@ import com.uvitos.fastoutfit.ui.components.WardrobeTabBar
 import com.uvitos.fastoutfit.ui.theme.*
 import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModel
 
-// Modelo de datos
-// Prenda de ejemplo — más adelante se reemplaza con datos reales
-data class GarmentItem(
-    val id: Int,
-    val category: String,
-    // imageUrl ira aquí cuando haya backend
-)
-
 //  Pantalla principal
 
 @Composable
@@ -80,7 +72,9 @@ fun WardrobeScreen(
             )
 
             // Barra filtro + agregar
-            FilterAddBar()
+            FilterAddBar(
+                onAddClick = onAddClick
+            )
 
             // Marcos de prendas
             LazyVerticalGrid(
