@@ -24,6 +24,7 @@ import com.uvitos.fastoutfit.ui.viewmodel.AuthViewModel
 import com.uvitos.fastoutfit.ui.screens.WardrobeScreen
 import kotlinx.coroutines.launch
 import com.uvitos.fastoutfit.ui.screens.addScreenTest
+import com.uvitos.fastoutfit.ui.screens.UserScreen
 
 @Composable
 fun FastOutfitNavGraph() {
@@ -136,7 +137,7 @@ fun FastOutfitNavGraph() {
             HomeScreen(
                 userName = FirebaseAuth.getInstance().currentUser?.email ?: "USUARIO",
                 onSettingsClick = { navController.navigate(Routes.SETTINGS) },
-                onProfileClick = { /* TODO: Navigate to profile */ },
+                onProfileClick = { navController.navigate(Routes.USER) },
                 onShuffleClick = { /* TODO: Generate new outfit */ },
                 onFavoriteClick = { /* TODO: Save outfit to favorites */ },
                 onAddGarmentClick = { navController.navigate(Routes.ADD_ITEM) },
@@ -160,6 +161,19 @@ fun FastOutfitNavGraph() {
                 onNotificationsClick = {navController.navigate(Routes.NOTIFICATIONS)}
             )
         }
+
+        composable(Routes.USER) {
+            UserScreen(
+                    onHomeClick = {
+                        navController.navigate(Routes.HOME)
+                    },
+                    onSettingsClick = { navController.navigate(Routes.SETTINGS) },
+                    onHelpClick = {
+                        // TODO
+                    }
+                )
+        }
+
 
         composable(Routes.WARDROBE) {
             WardrobeScreen(
