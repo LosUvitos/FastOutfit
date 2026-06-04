@@ -37,6 +37,7 @@ fun RegisterScreen(
     onLoginClick: () -> Unit = {},
     onRegisterClick: (email: String, password: String, confirmPassword: String) -> Unit = { _, _, _ -> },
     onGoogleSignIn: () -> Unit = {},
+    onRegisterSuccess: () -> Unit = {},
     authState: AuthState = AuthState.Idle,
 ) {
     var email     by remember { mutableStateOf("") }
@@ -44,7 +45,14 @@ fun RegisterScreen(
     var password  by remember { mutableStateOf("") }
     var password2 by remember { mutableStateOf("") }
     var showtext  by remember { mutableStateOf(false) }
+    var showWelcomeDialog by remember { mutableStateOf(false) }
     val matchPasswords = password == password2
+
+    LaunchedEffect(authState) {
+        if (authState is AuthState.Success) {
+            showWelcomeDialog = true
+        }
+    }
 
     AppBackground {
         Column(
@@ -134,6 +142,37 @@ fun RegisterScreen(
             Spacer(Modifier.height(24.dp))
             LinkText(text = stringResource(com.uvitos.fastoutfit.R.string.i_have_account), onClick = onLoginClick)
         }
+    }
+
+    if (showWelcomeDialog) {
+        AlertDialog(
+            containerColor = Color(0xFF1E1E1E),
+            onDismissRequest = { showWelcomeDialog = false },
+            title = {
+                Text(
+                    text = "¡Bienvenido a FastOutfit! 👔",
+                    color = TextPrimary,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    text = "Tu cuenta fue creada exitosamente. ¡Empieza agregando tu primera prenda!",
+                    color = TextSecondary
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showWelcomeDialog = false
+                    onRegisterSuccess()
+                }) {
+                    Text(
+                        text = "¡EMPECEMOS!",
+                        color = GoldAccent
+                    )
+                }
+            }
+        )
     }
 }
 

@@ -103,18 +103,16 @@ fun FastOutfitNavGraph() {
             val context = androidx.compose.ui.platform.LocalContext.current
             val scope = rememberCoroutineScope()
 
-            LaunchedEffect(authState) {
-                if (authState is AuthState.Success) {
-                    authViewModel.resetState()
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.REGISTER) { inclusive = true }
-                    }
-                }
-            }
             RegisterScreen(
                 onLoginClick = { navController.popBackStack() },
                 onRegisterClick = { email, password, confirm ->
                     authViewModel.register(email, password, confirm)
+                },
+                onRegisterSuccess = {
+                    authViewModel.resetState()
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.REGISTER) { inclusive = true }
+                    }
                 },
                 onGoogleSignIn = {
                     val credentialManager = androidx.credentials.CredentialManager.create(context)
