@@ -105,8 +105,8 @@ fun FastOutfitNavGraph() {
 
             RegisterScreen(
                 onLoginClick = { navController.popBackStack() },
-                onRegisterClick = { email, password, confirm ->
-                    authViewModel.register(email, password, confirm)
+                onRegisterClick = { email, name, password, confirm ->
+                    authViewModel.register(email, name, password, confirm)
                 },
                 onRegisterSuccess = {
                     authViewModel.resetState()
@@ -170,6 +170,8 @@ fun FastOutfitNavGraph() {
 
         composable(Routes.USER) {
             UserScreen(
+                    authViewModel = authViewModel,
+                    userName = authViewModel.currentUserName,
                     onHomeClick = {
                         navController.navigate(Routes.HOME)
                     },
