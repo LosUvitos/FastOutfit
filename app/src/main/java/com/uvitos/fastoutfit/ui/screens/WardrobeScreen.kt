@@ -282,7 +282,6 @@ private fun GarmentCard(
 
 
 
-}
 
 @Preview(
     name           = "Wardrobe Screen – Dark",
