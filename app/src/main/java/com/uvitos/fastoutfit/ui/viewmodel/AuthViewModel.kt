@@ -44,7 +44,13 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun register(email: String, password: String, confirmPassword: String){
+    val currentUserName: String
+        get() = auth.currentUser?.displayName
+            ?.takeIf { it.isNotBlank() }
+            ?: auth.currentUser?.email?.substringBefore("@")
+            ?: "Usuario"
+
+    fun register(email: String, name: String, password: String, confirmPassword: String){
         if (email.isBlank() || password.isBlank()) {
             _authState.value = AuthState.Error("Los campos no pueden ser vacios")
             return
@@ -65,10 +71,26 @@ class AuthViewModel : ViewModel() {
             _authState.value = AuthState.Loading
             try {
                 auth.createUserWithEmailAndPassword(email, password).await()
+                val user = auth.currentUser
+                val profileUpdates = com.google.firebase.auth.userProfileChangeRequest {
+                    displayName = name
+                }
+                user?.updateProfile(profileUpdates)?.await()
                 _authState.value = AuthState.Success
             } catch (e: Exception){
                 _authState.value = AuthState.Error(e.message ?: "Error al intentar registrarse")
             }
+        }
+    }
+
+    fun updateDisplayName(newName: String) {
+        viewModelScope.launch {
+            try {
+                val profileUpdates = com.google.firebase.auth.userProfileChangeRequest {
+                    displayName = newName
+                }
+                auth.currentUser?.updateProfile(profileUpdates)?.await()
+            } catch (_: Exception) { }
         }
     }
 

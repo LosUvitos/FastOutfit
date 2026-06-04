@@ -35,7 +35,7 @@ import com.uvitos.fastoutfit.ui.viewmodel.AuthState
 @Composable
 fun RegisterScreen(
     onLoginClick: () -> Unit = {},
-    onRegisterClick: (email: String, password: String, confirmPassword: String) -> Unit = { _, _, _ -> },
+    onRegisterClick: (email: String, name: String, password: String, confirmPassword: String) -> Unit = { _, _, _, _ -> },
     onGoogleSignIn: () -> Unit = {},
     onRegisterSuccess: () -> Unit = {},
     authState: AuthState = AuthState.Idle,
@@ -131,7 +131,7 @@ fun RegisterScreen(
             } else {
                 GoldButton(
                     text = stringResource(com.uvitos.fastoutfit.R.string.register),
-                    onClick = { onRegisterClick(email, password, password2) }
+                    onClick = { onRegisterClick(email, name, password, password2) }
                 )
                 Spacer(Modifier.height(12.dp))
                 OutlinedButton(onClick = onGoogleSignIn, modifier = Modifier.fillMaxWidth()) {
