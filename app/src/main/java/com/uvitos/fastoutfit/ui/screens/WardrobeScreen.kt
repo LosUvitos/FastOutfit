@@ -21,26 +21,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.uvitos.fastoutfit.R
+import com.uvitos.fastoutfit.data.database.ClothingItem
 import com.uvitos.fastoutfit.ui.components.AppBackground
 import com.uvitos.fastoutfit.ui.components.GarmentPlaceholderCard
 import com.uvitos.fastoutfit.ui.components.TopBarWithHelpHomeProfile
 import com.uvitos.fastoutfit.ui.components.WardrobeTabBar
 import com.uvitos.fastoutfit.ui.theme.*
+import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModel
 
 // Modelo de datos
-
-enum class ClothingCategory(val label: String) {
-    SHIRTS("SHIRTS"),
-    PANTS("PANTS"),
-    SHOES("SHOES"),
-    UPPER("UPPER"),
-}
-
 // Prenda de ejemplo — más adelante se reemplaza con datos reales
 data class GarmentItem(
     val id: Int,
-    val category: ClothingCategory,
+    val category: String,
     // imageUrl ira aquí cuando haya backend
 )
 
@@ -51,38 +46,15 @@ fun WardrobeScreen(
     onHelpClick:      () -> Unit = {},
     onHomeClick:      () -> Unit = {},
     onProfileClick:   () -> Unit = {},
-    onAddClick:       (ClothingCategory) -> Unit = {},
-    onFilterClick:    (ClothingCategory) -> Unit = {},
-    onFavoriteClick:  (GarmentItem) -> Unit = {},
-    onDeleteClick:    (GarmentItem) -> Unit = {},
+    onAddClick:       () -> Unit = {},
+    onFilterClick:    () -> Unit = {},
+    onFavoriteClick:  (ClothingItem) -> Unit = {},
+    onDeleteClick:    (ClothingItem) -> Unit = {},
+    clothingViewModel: ClothingViewModel
 ) {
-    // Tab seleccionado actualmente
-    var selectedCategory by remember { mutableStateOf(ClothingCategory.SHIRTS) }
+    val selectedCategory by clothingViewModel.selectedCategory.collectAsState()
+    val visibleGarments by clothingViewModel.visibleGarments.collectAsState()
 
-    // Lista de prendas de ejemplo — se reemplazará con datos reales
-    val allGarments = remember {
-        listOf(
-            GarmentItem(1,  ClothingCategory.SHIRTS),
-            GarmentItem(2,  ClothingCategory.SHIRTS),
-            GarmentItem(3,  ClothingCategory.SHIRTS),
-            GarmentItem(4,  ClothingCategory.SHIRTS),
-            GarmentItem(5,  ClothingCategory.PANTS),
-            GarmentItem(6,  ClothingCategory.PANTS),
-            GarmentItem(7,  ClothingCategory.PANTS),
-            GarmentItem(8,  ClothingCategory.PANTS),
-            GarmentItem(9,  ClothingCategory.SHOES),
-            GarmentItem(10, ClothingCategory.SHOES),
-            GarmentItem(11, ClothingCategory.SHOES),
-            GarmentItem(12, ClothingCategory.SHOES),
-            GarmentItem(13, ClothingCategory.UPPER),
-            GarmentItem(14, ClothingCategory.UPPER),
-            GarmentItem(15, ClothingCategory.UPPER),
-            GarmentItem(16, ClothingCategory.UPPER),
-        )
-    }
-
-    // Prendas filtradas por categoría activa
-    val visibleGarments = allGarments.filter { it.category == selectedCategory }
 
     AppBackground {
         Column(
@@ -99,7 +71,7 @@ fun WardrobeScreen(
 
             // Título categoría
             Text(
-                text       = selectedCategory.label,
+                text       = selectedCategory,
                 color      = TextPrimary,
                 fontSize   = 22.sp,
                 fontWeight = FontWeight.Bold,
@@ -108,10 +80,7 @@ fun WardrobeScreen(
             )
 
             // Barra filtro + agregar
-            FilterAddBar(
-                onFilterClick = { onFilterClick(selectedCategory) },
-                onAddClick    = { onAddClick(selectedCategory) },
-            )
+            FilterAddBar()
 
             // Marcos de prendas
             LazyVerticalGrid(
@@ -135,7 +104,11 @@ fun WardrobeScreen(
             // tabs inferiores
             WardrobeTabBar(
                 selected = selectedCategory,
-                onSelect = { selectedCategory = it },
+                onSelect = { category ->
+                    run {
+                        clothingViewModel.selectCategory(category)
+                    }
+                },
             )
         }
     }
@@ -145,8 +118,8 @@ fun WardrobeScreen(
 
 @Composable
 private fun FilterAddBar(
-    onFilterClick: () -> Unit,
-    onAddClick:    () -> Unit,
+    onFilterClick: () -> Unit = {},
+    onAddClick:    () -> Unit = {},
 ) {
     Row(
         modifier = Modifier
@@ -193,7 +166,7 @@ private fun FilterAddBar(
 
 @Composable
 private fun GarmentCard(
-    garment:         GarmentItem,
+    garment:         ClothingItem,
     onFavoriteClick: () -> Unit,
     onDeleteClick:   () -> Unit,
 ) {
@@ -203,6 +176,7 @@ private fun GarmentCard(
         GarmentPlaceholderCard(
             cardSize = 150.dp,
             modifier = Modifier.fillMaxWidth(),
+            imagePath = garment.imagePath
         )
 
         // Botones de cada marco
@@ -254,6 +228,6 @@ fun WardrobeScreenPreview() {
         darkTheme    = true,
         dynamicColor = false,
     ) {
-        WardrobeScreen()
+        WardrobeScreen(clothingViewModel = viewModel())
     }
 }

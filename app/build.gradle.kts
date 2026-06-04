@@ -36,8 +36,10 @@ android {
     buildFeatures {
         compose = true
     }
-    kotlinOptions {
-        jvmTarget = "11"
+}
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
     }
 }
 
@@ -62,7 +64,7 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    ksp("androidx.room:room-compiler:2.5.0")
+    ksp(libs.androidx.room.compiler)
 
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:34.13.0"))

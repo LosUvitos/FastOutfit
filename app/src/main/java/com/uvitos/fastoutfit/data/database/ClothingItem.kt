@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 data class ClothingItem(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val name: String = "",
-    val imagePath: String = "",   // "/data/.../outfit_123.jpg"
-    val category: String = "",    // "shirts", "pants", etc.
+    val name: String,
+    val imagePath: String,   // "/data/.../outfit_123.jpg"
+    var category: String,    // "shirts", "pants", etc.
     val createdAt: Long = System.currentTimeMillis()
 )

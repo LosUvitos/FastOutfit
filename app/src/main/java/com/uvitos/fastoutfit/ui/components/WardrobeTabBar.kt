@@ -18,13 +18,13 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uvitos.fastoutfit.ui.screens.ClothingCategory
+import com.uvitos.fastoutfit.navigation.Categories
 import com.uvitos.fastoutfit.ui.theme.*
 
 @Composable
 fun WardrobeTabBar(
-    selected: ClothingCategory,
-    onSelect: (ClothingCategory) -> Unit,
+    selected: String,
+    onSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -33,10 +33,10 @@ fun WardrobeTabBar(
             .height(110.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
-        ClothingCategory.entries.forEach { category ->
+        Categories.all.forEach { category ->
             val isActive = category == selected
             DrawerTab(
-                label    = category.label,
+                label    = category,
                 isActive = isActive,
                 modifier = Modifier
                     .weight(1f)
