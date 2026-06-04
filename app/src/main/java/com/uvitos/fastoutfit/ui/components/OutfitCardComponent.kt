@@ -1,6 +1,6 @@
 package com.uvitos.fastoutfit.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
+import  androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,12 +24,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.uvitos.fastoutfit.data.database.ClothingItem
 import com.uvitos.fastoutfit.ui.theme.AccentMain
 import com.uvitos.fastoutfit.ui.theme.ColorSecondary
 
 @Composable
 fun OutfitCardComponent(
     modifier: Modifier = Modifier,
+    shirt: ClothingItem? = null,
+    pant: ClothingItem? = null,
+    upper: ClothingItem? = null,
+    shoes: ClothingItem? = null,
     onShuffleClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
     cardBackgroundColor: Color = ColorSecondary
@@ -60,15 +65,29 @@ fun OutfitCardComponent(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    GarmentPlaceholderCard(modifier = Modifier.weight(1f))
-                    GarmentPlaceholderCard(modifier = Modifier.weight(1f))
+                    GarmentPlaceholderCard(
+                        modifier = Modifier.weight(1f),
+                        imagePath = shirt?.imagePath ?: ""
+                    )
+
+                    GarmentPlaceholderCard(
+                        modifier = Modifier.weight(1f),
+                        imagePath = upper?.imagePath ?: ""
+                    )
                 }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    GarmentPlaceholderCard(modifier = Modifier.weight(1f))
-                    GarmentPlaceholderCard(modifier = Modifier.weight(1f))
+                    GarmentPlaceholderCard(
+                        modifier = Modifier.weight(1f),
+                        imagePath = pant?.imagePath ?: ""
+                    )
+
+                    GarmentPlaceholderCard(
+                        modifier = Modifier.weight(1f),
+                        imagePath = shoes?.imagePath ?: ""
+                    )
                 }
             }
 

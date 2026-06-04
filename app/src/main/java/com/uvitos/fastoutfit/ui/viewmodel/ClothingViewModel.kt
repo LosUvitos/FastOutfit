@@ -24,6 +24,51 @@ class ClothingViewModel(private val repository: ClothingRepository) : ViewModel(
     private val _selectedCategory = MutableStateFlow(Categories.SHIRTS)
     val selectedCategory: StateFlow<String> = _selectedCategory
 
+    data class Outfit(
+        val shirt: ClothingItem?,
+        val pant: ClothingItem?,
+        val upper: ClothingItem?,
+        val shoes: ClothingItem?
+    )
+    private val _randomOutfit = MutableStateFlow(
+        Outfit(
+            shirt = null,
+            pant = null,
+            upper = null,
+            shoes = null
+        )
+    )
+
+    val randomOutfit: StateFlow<Outfit> = _randomOutfit
+
+    fun generateRandomOutfit() {
+
+        val garments = all.value
+
+        val shirts = garments.filter {
+            it.category == Categories.SHIRTS
+        }
+
+        val pants = garments.filter {
+            it.category == Categories.PANTS
+        }
+
+        val uppers = garments.filter {
+            it.category == Categories.UPPER
+        }
+
+        val shoes = garments.filter {
+            it.category == Categories.SHOES
+        }
+
+        _randomOutfit.value = Outfit(
+            shirt = shirts.randomOrNull(),
+            pant = pants.randomOrNull(),
+            upper = uppers.randomOrNull(),
+            shoes = shoes.randomOrNull()
+        )
+    }
+
     val shirts: StateFlow<List<ClothingItem>> =
         repository.getByCategory("shirts")
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
@@ -89,6 +134,16 @@ class ClothingViewModel(private val repository: ClothingRepository) : ViewModel(
             }
         }
         return file.absolutePath
+    }
+    init {
+        viewModelScope.launch {
+            all.collect { garments ->
+
+                if (garments.isNotEmpty()) {
+                    generateRandomOutfit()
+                }
+            }
+        }
     }
 }
 

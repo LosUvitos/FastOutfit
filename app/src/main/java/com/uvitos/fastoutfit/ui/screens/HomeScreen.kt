@@ -16,9 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.uvitos.fastoutfit.R
 import com.uvitos.fastoutfit.ui.components.AppBackground
 import com.uvitos.fastoutfit.ui.components.BottomNavigationComponent
@@ -27,6 +31,9 @@ import com.uvitos.fastoutfit.ui.components.OutfitCardComponent
 import com.uvitos.fastoutfit.ui.components.TopBarComponent
 import com.uvitos.fastoutfit.ui.components.WelcomeHeaderComponent
 import com.uvitos.fastoutfit.ui.theme.AzulOscuro
+import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModel
+import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModelFactory
+
 
 @Composable
 fun HomeScreen(
@@ -39,6 +46,14 @@ fun HomeScreen(
     onAddGarmentClick: () -> Unit = {},
     onWardrobeClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+
+    val clothingViewModel: ClothingViewModel = viewModel(
+        factory = ClothingViewModelFactory(context)
+    )
+
+    val randomOutfit by clothingViewModel.randomOutfit.collectAsState()
+
     AppBackground() {
         Scaffold(
             modifier = modifier.systemBarsPadding(),
@@ -69,7 +84,12 @@ fun HomeScreen(
                         Spacer(modifier = Modifier.height(24.dp))
 
                         OutfitCardComponent(
-                            onShuffleClick = onShuffleClick,
+                            shirt = randomOutfit.shirt,
+                            pant = randomOutfit.pant,
+                            upper = randomOutfit.upper,
+                            shoes = randomOutfit.shoes,
+                            onShuffleClick = {
+                                clothingViewModel.generateRandomOutfit() },
                             onFavoriteClick = onFavoriteClick
                         )
                     }

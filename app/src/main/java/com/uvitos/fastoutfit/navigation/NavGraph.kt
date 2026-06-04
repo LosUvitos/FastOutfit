@@ -142,10 +142,11 @@ fun FastOutfitNavGraph() {
 
         composable(Routes.HOME) {
             HomeScreen(
+
                 userName = FirebaseAuth.getInstance().currentUser?.email ?: "USUARIO",
                 onSettingsClick = { navController.navigate(Routes.SETTINGS) },
                 onProfileClick = { navController.navigate(Routes.USER) },
-                onShuffleClick = { /* TODO: Generate new outfit */ },
+                onShuffleClick = { clothingViewModel.generateRandomOutfit() },
                 onFavoriteClick = { /* TODO: Save outfit to favorites */ },
                 onAddGarmentClick = { navController.navigate(Routes.ADD_ITEM) },
                 onWardrobeClick = { navController.navigate(Routes.WARDROBE) }
