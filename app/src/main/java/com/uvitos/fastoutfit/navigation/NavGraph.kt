@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -24,12 +25,18 @@ import com.uvitos.fastoutfit.ui.viewmodel.AuthViewModel
 import com.uvitos.fastoutfit.ui.screens.WardrobeScreen
 import kotlinx.coroutines.launch
 import com.uvitos.fastoutfit.ui.screens.addScreenTest
+import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModel
+import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModelFactory
 import com.uvitos.fastoutfit.ui.screens.UserScreen
 
 @Composable
 fun FastOutfitNavGraph() {
     val navController = rememberNavController()
+    val context = LocalContext.current
     val authViewModel: AuthViewModel = viewModel()
+    val clothingViewModel: ClothingViewModel = viewModel(
+        factory = ClothingViewModelFactory(context)
+    )
     val authState by authViewModel.authState.collectAsState()
 
     val startDestination = if (authViewModel.isUserLoggedIn) Routes.HOME else Routes.SPLASH
@@ -181,9 +188,10 @@ fun FastOutfitNavGraph() {
                 onHelpClick    = { /* TODO: ayuda */ },
                 onProfileClick = { /* TODO: perfil */ },
                 onAddClick     = { navController.navigate(Routes.ADD_ITEM)},
-                onFilterClick  = { category -> /* TODO: filtrar $category */ },
+                onFilterClick  = {/* TODO: filtrar $category */ },
                 onFavoriteClick = { garment -> /* TODO: marcar favorito ${garment.id} */ },
                 onDeleteClick   = { garment -> /* TODO: eliminar ${garment.id} */ },
+                clothingViewModel = clothingViewModel
             )
         }
 
@@ -194,7 +202,13 @@ fun FastOutfitNavGraph() {
                         popUpTo(Routes.ADD_ITEM) {inclusive = true}
                     }
                 },
-                onHelpClick = {}
+                onHelpClick = {},
+                onOkayClick = {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.ADD_ITEM) {inclusive = true}
+                    }
+                },
+                viewModel = clothingViewModel
             )
         }
 
