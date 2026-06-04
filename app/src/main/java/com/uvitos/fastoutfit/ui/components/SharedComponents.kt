@@ -355,3 +355,52 @@ fun TopBarWithHelpHomeProfile(
         }
     }
 }
+@Composable
+fun TopBarWithHelpHomeSettings(
+    onHelpClick: () -> Unit = {},
+    onHomeClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {},
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 12.dp),
+    ) {
+
+        IconButton(
+            onClick = onHelpClick,
+            modifier = Modifier.align(Alignment.CenterStart)
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_help),
+                contentDescription = "Help",
+                tint = TextPrimary,
+                modifier = Modifier.size(28.dp)
+            )
+        }
+
+        IconButton(
+            onClick = onHomeClick,
+            modifier = Modifier.align(Alignment.Center)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Home,
+                contentDescription = "Home",
+                tint = GoldAccent,
+                modifier = Modifier.size(34.dp)
+            )
+        }
+
+        IconButton(
+            onClick = onSettingsClick,
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Settings,
+                contentDescription = "Settings",
+                tint = TextPrimary,
+                modifier = Modifier.size(28.dp)
+            )
+        }
+    }
+}

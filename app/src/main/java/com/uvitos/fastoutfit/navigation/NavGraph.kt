@@ -17,6 +17,7 @@ import com.uvitos.fastoutfit.navigation.Routes
 import com.uvitos.fastoutfit.ui.screens.AddScreen
 import com.uvitos.fastoutfit.ui.screens.LoginScreen
 import com.uvitos.fastoutfit.ui.screens.HomeScreen
+import com.uvitos.fastoutfit.ui.screens.NotificationsScreen
 import com.uvitos.fastoutfit.ui.screens.RegisterScreen
 import com.uvitos.fastoutfit.ui.screens.SettingsScreen
 import com.uvitos.fastoutfit.ui.viewmodel.AuthState
@@ -26,6 +27,7 @@ import kotlinx.coroutines.launch
 import com.uvitos.fastoutfit.ui.screens.addScreenTest
 import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModel
 import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModelFactory
+import com.uvitos.fastoutfit.ui.screens.UserScreen
 
 @Composable
 fun FastOutfitNavGraph() {
@@ -42,6 +44,7 @@ fun FastOutfitNavGraph() {
     NavHost(
         navController = navController,
         startDestination = startDestination  // corregido: usa la variable
+
     ) {
 
         composable(Routes.SPLASH) {
@@ -141,7 +144,7 @@ fun FastOutfitNavGraph() {
             HomeScreen(
                 userName = FirebaseAuth.getInstance().currentUser?.email ?: "USUARIO",
                 onSettingsClick = { navController.navigate(Routes.SETTINGS) },
-                onProfileClick = { /* TODO: Navigate to profile */ },
+                onProfileClick = { navController.navigate(Routes.USER) },
                 onShuffleClick = { /* TODO: Generate new outfit */ },
                 onFavoriteClick = { /* TODO: Save outfit to favorites */ },
                 onAddGarmentClick = { navController.navigate(Routes.ADD_ITEM) },
@@ -160,9 +163,24 @@ fun FastOutfitNavGraph() {
                 },
                 onHomeClick = {
                     navController.popBackStack()
-            }
+            },
+
+                onNotificationsClick = {navController.navigate(Routes.NOTIFICATIONS)}
             )
         }
+
+        composable(Routes.USER) {
+            UserScreen(
+                    onHomeClick = {
+                        navController.navigate(Routes.HOME)
+                    },
+                    onSettingsClick = { navController.navigate(Routes.SETTINGS) },
+                    onHelpClick = {
+                        // TODO
+                    }
+                )
+        }
+
 
         composable(Routes.WARDROBE) {
             WardrobeScreen(
@@ -191,6 +209,12 @@ fun FastOutfitNavGraph() {
                     }
                 },
                 viewModel = clothingViewModel
+            )
+        }
+
+        composable(Routes.NOTIFICATIONS){
+            NotificationsScreen (
+                onBackClick = {navController.popBackStack()}
             )
         }
     }
