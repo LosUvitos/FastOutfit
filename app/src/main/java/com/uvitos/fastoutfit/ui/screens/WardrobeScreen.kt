@@ -97,6 +97,7 @@ fun WardrobeScreen(
                         garment         = garment,
                         onFavoriteClick = { onFavoriteClick(garment) },
                         onDeleteClick   = { onDeleteClick(garment) },
+                        clothingViewModel
                     )
                 }
             }
@@ -169,6 +170,7 @@ private fun GarmentCard(
     garment:         ClothingItem,
     onFavoriteClick: () -> Unit,
     onDeleteClick:   () -> Unit,
+    clothingViewModel: ClothingViewModel
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
@@ -200,7 +202,9 @@ private fun GarmentCard(
             }
 
             IconButton(
-                onClick  = onDeleteClick,
+                onClick  = {
+                    clothingViewModel.deleteItem(garment)
+                },
                 modifier = Modifier.size(32.dp),
             ) {
                 Icon(

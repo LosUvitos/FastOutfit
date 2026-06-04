@@ -2,6 +2,7 @@ package com.uvitos.fastoutfit.ui.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,6 +40,13 @@ class ClothingViewModel(private val repository: ClothingRepository) : ViewModel(
     }
     fun deleteItem(item: ClothingItem) {
         viewModelScope.launch {
+            if (item.imagePath.isNotEmpty()) {
+                val file = File(item.imagePath)
+                if (file.exists()) {
+                    file.delete()
+                    Log.d("ClothingVM", "🗑 Imagen borrada: ${item.imagePath}")
+                }
+            }
             repository.delete(item)
         }
     }
