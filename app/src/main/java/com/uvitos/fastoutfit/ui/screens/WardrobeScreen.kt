@@ -30,6 +30,7 @@ import com.uvitos.fastoutfit.ui.components.TopBarWithHelpHomeProfile
 import com.uvitos.fastoutfit.ui.components.WardrobeTabBar
 import com.uvitos.fastoutfit.ui.theme.*
 import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModel
+import androidx.compose.ui.graphics.Color
 
 //  Pantalla principal
 
@@ -46,7 +47,7 @@ fun WardrobeScreen(
 ) {
     val selectedCategory by clothingViewModel.selectedCategory.collectAsState()
     val visibleGarments by clothingViewModel.visibleGarments.collectAsState()
-
+    var itemToDelete by remember { mutableStateOf<ClothingItem?>(null) }
 
     AppBackground {
         Column(
@@ -77,22 +78,51 @@ fun WardrobeScreen(
             )
 
             // Marcos de prendas
-            LazyVerticalGrid(
-                columns      = GridCells.Fixed(2),
-                modifier     = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp),
-                contentPadding      = PaddingValues(vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement   = Arrangement.spacedBy(8.dp),
-            ) {
-                items(visibleGarments, key = { it.id }) { garment ->
-                    GarmentCard(
-                        garment         = garment,
-                        onFavoriteClick = { onFavoriteClick(garment) },
-                        onDeleteClick   = { onDeleteClick(garment) },
-                        clothingViewModel
-                    )
+            if (visibleGarments.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "👗",
+                            fontSize = 48.sp
+                        )
+                        Spacer(Modifier.height(12.dp))
+                        Text(
+                            text = "Tu armario está vacío",
+                            color = TextPrimary,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(Modifier.height(6.dp))
+                        Text(
+                            text = "Agrega tu primera prenda con el botón +",
+                            color = TextSecondary,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
+            } else {
+                LazyVerticalGrid(
+                    columns      = GridCells.Fixed(2),
+                    modifier     = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 12.dp),
+                    contentPadding      = PaddingValues(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement   = Arrangement.spacedBy(8.dp),
+                ) {
+                    items(visibleGarments, key = { it.id }) { garment ->
+                        GarmentCard(
+                            garment         = garment,
+                            onFavoriteClick = { onFavoriteClick(garment) },
+                            onDeleteClick   = { itemToDelete = garment },
+                            clothingViewModel
+                        )
+                    }
                 }
             }
 
@@ -106,6 +136,44 @@ fun WardrobeScreen(
                 },
             )
         }
+    }
+
+    if (itemToDelete != null) {
+        AlertDialog(
+            containerColor = Color(0xFF1E1E1E),
+            onDismissRequest = { itemToDelete = null },
+            title = {
+                Text(
+                    text = "Eliminar prenda",
+                    color = TextPrimary
+                )
+            },
+            text = {
+                Text(
+                    text = "¿Estás seguro de que quieres eliminar esta prenda? Esta acción no se puede deshacer.",
+                    color = TextSecondary
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    clothingViewModel.deleteItem(itemToDelete!!)
+                    itemToDelete = null
+                }) {
+                    Text(
+                        text = "ELIMINAR",
+                        color = Color(0xFFE53935)
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { itemToDelete = null }) {
+                    Text(
+                        text = "CANCELAR",
+                        color = TextSecondary
+                    )
+                }
+            }
+        )
     }
 }
 
@@ -197,7 +265,7 @@ private fun GarmentCard(
 
             IconButton(
                 onClick  = {
-                    clothingViewModel.deleteItem(garment)
+                    onDeleteClick()
                 },
                 modifier = Modifier.size(32.dp),
             ) {
@@ -211,6 +279,7 @@ private fun GarmentCard(
         }
     }
 }
+
 
 
 

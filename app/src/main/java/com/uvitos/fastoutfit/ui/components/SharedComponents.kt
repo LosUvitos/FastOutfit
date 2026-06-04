@@ -198,29 +198,16 @@ fun FastOutfitTopBar(
 
 @Composable
 fun BoltLogo(size: Int = 120) {
-    Surface(
+    Box(
         modifier = Modifier.size(size.dp),
-        shape = CircleShape,
-        color = Color(0xFFB0B0B0),
-        shadowElevation = 12.dp,
-        tonalElevation = 4.dp,
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-                .clip(CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                shape = CircleShape,
-                color = Color(0xFFD8D8D8),
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                }
-            }
-        }
+        Image(
+            painter = painterResource(R.drawable.fastoutfitnb),
+            contentDescription = "FastOutfit logo",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Fit
+        )
     }
 }
 

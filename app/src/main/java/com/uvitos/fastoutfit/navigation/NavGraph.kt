@@ -103,18 +103,16 @@ fun FastOutfitNavGraph() {
             val context = androidx.compose.ui.platform.LocalContext.current
             val scope = rememberCoroutineScope()
 
-            LaunchedEffect(authState) {
-                if (authState is AuthState.Success) {
+            RegisterScreen(
+                onLoginClick = { navController.popBackStack() },
+                onRegisterClick = { email, name, password, confirm ->
+                    authViewModel.register(email, name, password, confirm)
+                },
+                onRegisterSuccess = {
                     authViewModel.resetState()
                     navController.navigate(Routes.HOME) {
                         popUpTo(Routes.REGISTER) { inclusive = true }
                     }
-                }
-            }
-            RegisterScreen(
-                onLoginClick = { navController.popBackStack() },
-                onRegisterClick = { email, password, confirm ->
-                    authViewModel.register(email, password, confirm)
                 },
                 onGoogleSignIn = {
                     val credentialManager = androidx.credentials.CredentialManager.create(context)
@@ -143,7 +141,7 @@ fun FastOutfitNavGraph() {
         composable(Routes.HOME) {
             HomeScreen(
 
-                userName = FirebaseAuth.getInstance().currentUser?.email ?: "USUARIO",
+                userName = authViewModel.currentUserName,
                 onSettingsClick = { navController.navigate(Routes.SETTINGS) },
                 onProfileClick = { navController.navigate(Routes.USER) },
                 onShuffleClick = { clothingViewModel.generateRandomOutfit() },
@@ -172,6 +170,8 @@ fun FastOutfitNavGraph() {
 
         composable(Routes.USER) {
             UserScreen(
+                    authViewModel = authViewModel,
+                    userName = authViewModel.currentUserName,
                     onHomeClick = {
                         navController.navigate(Routes.HOME)
                     },
