@@ -16,9 +16,8 @@ sealed class AuthState {
     data class Error(val message: String) : AuthState()
 }
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel(private val auth: FirebaseAuth = FirebaseAuth.getInstance()) : ViewModel() {
 
-    private val auth = FirebaseAuth.getInstance()
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState
     private val _resetState = MutableStateFlow<AuthState>(AuthState.Idle)
@@ -148,7 +147,7 @@ class AuthViewModel : ViewModel() {
         _authState.value = AuthState.Idle
     }
 
-    private fun validatePassword(password: String): String? {
+    internal fun validatePassword(password: String): String? {
         if (password.length < 8)  return "Mínimo 8 caracteres"
         if (password.length > 16) return "Máximo 16 caracteres"
         if (!password.any { it.isUpperCase() }) return "Debe tener al menos una mayúscula"

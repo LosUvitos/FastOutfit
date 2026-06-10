@@ -76,5 +76,16 @@ dependencies {
     implementation("androidx.credentials:credentials:1.3.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
+    // Testing
+    testImplementation("junit:junit:4.13.2") // ya la tienes
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("com.google.firebase:firebase-auth-ktx:23.0.0")
+
+    // Para testear StateFlow
+    testImplementation("app.cash.turbine:turbine:1.1.0")
+
+    testImplementation("io.mockk:mockk:1.13.10")
 }
 
