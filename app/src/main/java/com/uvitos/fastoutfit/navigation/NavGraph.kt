@@ -23,6 +23,7 @@ import com.uvitos.fastoutfit.ui.screens.SettingsScreen
 import com.uvitos.fastoutfit.ui.viewmodel.AuthState
 import com.uvitos.fastoutfit.ui.viewmodel.AuthViewModel
 import com.uvitos.fastoutfit.ui.screens.WardrobeScreen
+import com.uvitos.fastoutfit.ui.screens.FavoriteOutfitsScreen
 import kotlinx.coroutines.launch
 import com.uvitos.fastoutfit.ui.screens.addScreenTest
 import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModel
@@ -190,7 +191,15 @@ fun FastOutfitNavGraph() {
                 onAddClick     = { navController.navigate(Routes.ADD_ITEM)},
                 onFilterClick  = {/* TODO: filtrar $category */ },
                 onFavoriteClick = { garment -> /* TODO: marcar favorito ${garment.id} */ },
+                onFavoritesClick = { navController.navigate(Routes.FAVORITE_OUTFITS) },
                 onDeleteClick   = { garment -> /* TODO: eliminar ${garment.id} */ },
+                clothingViewModel = clothingViewModel
+            )
+        }
+
+        composable(Routes.FAVORITE_OUTFITS) {
+            FavoriteOutfitsScreen(
+                onBackClick = { navController.popBackStack() },
                 clothingViewModel = clothingViewModel
             )
         }

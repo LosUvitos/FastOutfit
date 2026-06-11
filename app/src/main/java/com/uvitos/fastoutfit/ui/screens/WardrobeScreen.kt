@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
@@ -40,9 +41,10 @@ fun WardrobeScreen(
     onHomeClick:      () -> Unit = {},
     onProfileClick:   () -> Unit = {},
     onAddClick:       () -> Unit = {},
-    onFilterClick:    () -> Unit = {},
-    onFavoriteClick:  (ClothingItem) -> Unit = {},
-    onDeleteClick:    (ClothingItem) -> Unit = {},
+    onFilterClick:     () -> Unit = {},
+    onFavoriteClick:   (ClothingItem) -> Unit = {},
+    onFavoritesClick:  () -> Unit = {},
+    onDeleteClick:     (ClothingItem) -> Unit = {},
     clothingViewModel: ClothingViewModel
 ) {
     val selectedCategory by clothingViewModel.selectedCategory.collectAsState()
@@ -76,6 +78,31 @@ fun WardrobeScreen(
             FilterAddBar(
                 onAddClick = onAddClick
             )
+
+            // Botón Mis Favoritos
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                TextButton(onClick = onFavoritesClick) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = stringResource(R.string.cd_favorite),
+                        tint = GoldAccent,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        text = "MIS FAVORITOS",
+                        color = GoldAccent,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        letterSpacing = 1.sp
+                    )
+                }
+            }
 
             // Marcos de prendas
             if (visibleGarments.isEmpty()) {

@@ -151,6 +151,16 @@ class ClothingViewModel(
         }
     }
 
+    fun resolveFavoriteOutfit(outfit: FavoriteOutfit): Outfit {
+        val items = all.value
+        return Outfit(
+            shirt = items.find { it.id == outfit.shirtId },
+            pant = items.find { it.id == outfit.pantId },
+            upper = items.find { it.id == outfit.upperId },
+            shoes = items.find { it.id == outfit.shoesId }
+        )
+    }
+
     // Copies the photo to a permanent location
     private fun saveImageToStorage(context: Context, uri: Uri): String {
         val fileName = "outfit_${System.currentTimeMillis()}.jpg"
