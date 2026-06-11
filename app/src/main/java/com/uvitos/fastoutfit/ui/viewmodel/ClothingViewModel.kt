@@ -7,7 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uvitos.fastoutfit.data.database.ClothingItem
+import com.uvitos.fastoutfit.data.database.FavoriteOutfit
 import com.uvitos.fastoutfit.data.repository.ClothingRepository
+import com.uvitos.fastoutfit.data.repository.FavoriteOutfitRepository
 import com.uvitos.fastoutfit.navigation.Categories
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +20,10 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 
-class ClothingViewModel(private val repository: ClothingRepository) : ViewModel() {
+class ClothingViewModel(
+    private val repository: ClothingRepository,
+    private val favoriteOutfitRepository: FavoriteOutfitRepository
+) : ViewModel() {
 
     // State the screen can observe
     private val _selectedCategory = MutableStateFlow(Categories.SHIRTS)
@@ -40,6 +45,10 @@ class ClothingViewModel(private val repository: ClothingRepository) : ViewModel(
     )
 
     val randomOutfit: StateFlow<Outfit> = _randomOutfit
+
+    val favoriteOutfits: StateFlow<List<FavoriteOutfit>> =
+        favoriteOutfitRepository.getAll()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     fun generateRandomOutfit() {
 

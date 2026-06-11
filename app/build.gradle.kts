@@ -60,13 +60,13 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
-    testImplementation(libs.mockito.kotlin) //
+    testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation("androidx.room:room-testing:2.8.4")
-    androidTestImplementation(libs.kotlinx.coroutines.test.v181)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.turbine)
     androidTestImplementation(libs.core.ktx)
     androidTestImplementation(libs.androidx.junit.ktx)
@@ -87,14 +87,6 @@ dependencies {
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
     // Testing
-    testImplementation("junit:junit:4.13.2") // ya la tienes
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("io.mockk:mockk:1.13.10")
     testImplementation("com.google.firebase:firebase-auth-ktx:23.0.0")
-
-    // Para testear StateFlow
-    testImplementation("app.cash.turbine:turbine:1.1.0")
-
-    testImplementation("io.mockk:mockk:1.13.10")
 }
 
