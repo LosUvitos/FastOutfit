@@ -7,7 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uvitos.fastoutfit.data.database.ClothingItem
+import com.uvitos.fastoutfit.data.database.FavoriteOutfit
 import com.uvitos.fastoutfit.data.repository.ClothingRepository
+import com.uvitos.fastoutfit.data.repository.FavoriteOutfitRepository
 import com.uvitos.fastoutfit.navigation.Categories
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +20,10 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 
-class ClothingViewModel(private val repository: ClothingRepository) : ViewModel() {
+class ClothingViewModel(
+    private val repository: ClothingRepository,
+    private val favoriteOutfitRepository: FavoriteOutfitRepository
+) : ViewModel() {
 
     // State the screen can observe
     private val _selectedCategory = MutableStateFlow(Categories.SHIRTS)
@@ -40,6 +45,10 @@ class ClothingViewModel(private val repository: ClothingRepository) : ViewModel(
     )
 
     val randomOutfit: StateFlow<Outfit> = _randomOutfit
+
+    val favoriteOutfits: StateFlow<List<FavoriteOutfit>> =
+        favoriteOutfitRepository.getAll()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     fun generateRandomOutfit() {
 
@@ -120,6 +129,36 @@ class ClothingViewModel(private val repository: ClothingRepository) : ViewModel(
             )
             saveItem(item)
         }
+    }
+
+    fun saveCurrentOutfitAsFavorite() {
+        val outfit = _randomOutfit.value
+        if (outfit.shirt == null && outfit.pant == null && outfit.upper == null && outfit.shoes == null) return
+        viewModelScope.launch {
+            val favorite = FavoriteOutfit(
+                shirtId = outfit.shirt?.id,
+                pantId = outfit.pant?.id,
+                upperId = outfit.upper?.id,
+                shoesId = outfit.shoes?.id
+            )
+            favoriteOutfitRepository.insert(favorite)
+        }
+    }
+
+    fun deleteFavoriteOutfit(outfit: FavoriteOutfit) {
+        viewModelScope.launch {
+            favoriteOutfitRepository.delete(outfit)
+        }
+    }
+
+    fun resolveFavoriteOutfit(outfit: FavoriteOutfit): Outfit {
+        val items = all.value
+        return Outfit(
+            shirt = items.find { it.id == outfit.shirtId },
+            pant = items.find { it.id == outfit.pantId },
+            upper = items.find { it.id == outfit.upperId },
+            shoes = items.find { it.id == outfit.shoesId }
+        )
     }
 
     // Copies the photo to a permanent location

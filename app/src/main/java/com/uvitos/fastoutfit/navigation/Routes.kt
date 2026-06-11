@@ -12,4 +12,5 @@ object Routes {
     const val USER = "user"
     const val WARDROBE = "Wardrobe"
     const val NOTIFICATIONS = "notifications"
+    const val FAVORITE_OUTFITS = "favorite_outfits"
 }
