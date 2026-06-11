@@ -1,6 +1,7 @@
 package com.uvitos.fastoutfit.ui.components
 
-import  androidx.compose.foundation.layout.Arrangement
+import  androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,12 +38,14 @@ fun OutfitCardComponent(
     shoes: ClothingItem? = null,
     onShuffleClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
+    onClick: () -> Unit = {},
     cardBackgroundColor: Color = ColorSecondary
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = cardBackgroundColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {

@@ -1,5 +1,6 @@
 package com.uvitos.fastoutfit.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -20,6 +21,7 @@ import com.uvitos.fastoutfit.R
 import com.uvitos.fastoutfit.data.database.FavoriteOutfit
 import com.uvitos.fastoutfit.ui.components.AppBackground
 import com.uvitos.fastoutfit.ui.components.GarmentPlaceholderCard
+import com.uvitos.fastoutfit.ui.components.OutfitDetailDialog
 import com.uvitos.fastoutfit.ui.theme.*
 import com.uvitos.fastoutfit.ui.viewmodel.ClothingViewModel
 
@@ -30,6 +32,7 @@ fun FavoriteOutfitsScreen(
 ) {
     val favoriteOutfits by clothingViewModel.favoriteOutfits.collectAsState()
     var outfitToDelete by remember { mutableStateOf<FavoriteOutfit?>(null) }
+    var selectedOutfitId by remember { mutableStateOf<Int?>(null) }
 
     AppBackground {
         Column(
@@ -91,6 +94,7 @@ fun FavoriteOutfitsScreen(
                         FavoriteOutfitCard(
                             outfit = outfit,
                             clothingViewModel = clothingViewModel,
+                            onClick = { selectedOutfitId = outfit.id },
                             onDeleteClick = { outfitToDelete = outfit }
                         )
                     }
@@ -136,6 +140,16 @@ fun FavoriteOutfitsScreen(
             }
         )
     }
+
+    if (selectedOutfitId != null) {
+        val outfit = favoriteOutfits.find { it.id == selectedOutfitId }
+        if (outfit != null) {
+            OutfitDetailDialog(
+                outfit = clothingViewModel.resolveFavoriteOutfit(outfit),
+                onDismiss = { selectedOutfitId = null }
+            )
+        }
+    }
 }
 
 @Composable
@@ -165,6 +179,7 @@ private fun TopBar(
 private fun FavoriteOutfitCard(
     outfit: FavoriteOutfit,
     clothingViewModel: ClothingViewModel,
+    onClick: () -> Unit = {},
     onDeleteClick: () -> Unit
 ) {
     val resolved = remember(outfit) {
@@ -177,6 +192,7 @@ private fun FavoriteOutfitCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
+                .clickable(onClick = onClick)
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),

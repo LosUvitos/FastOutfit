@@ -35,6 +35,7 @@ import com.uvitos.fastoutfit.ui.components.AppBackground
 import com.uvitos.fastoutfit.ui.components.BottomNavigationComponent
 import com.uvitos.fastoutfit.ui.components.FloatingActionButtonComponent
 import com.uvitos.fastoutfit.ui.components.OutfitCardComponent
+import com.uvitos.fastoutfit.ui.components.OutfitDetailDialog
 import com.uvitos.fastoutfit.ui.components.TopBarComponent
 import com.uvitos.fastoutfit.ui.components.WelcomeHeaderComponent
 import com.uvitos.fastoutfit.ui.theme.AzulOscuro
@@ -62,6 +63,7 @@ fun HomeScreen(
 
     val randomOutfit by clothingViewModel.randomOutfit.collectAsState()
     var showFavoriteDialog by remember { mutableStateOf(false) }
+    var showOutfitDetail by remember { mutableStateOf(false) }
 
     AppBackground() {
         Scaffold(
@@ -99,7 +101,8 @@ fun HomeScreen(
                             shoes = randomOutfit.shoes,
                             onShuffleClick = {
                                 clothingViewModel.generateRandomOutfit() },
-                            onFavoriteClick = { showFavoriteDialog = true }
+                            onFavoriteClick = { showFavoriteDialog = true },
+                            onClick = { showOutfitDetail = true }
                         )
                     }
 
@@ -162,6 +165,13 @@ fun HomeScreen(
                     )
                 }
             }
+        )
+    }
+
+    if (showOutfitDetail) {
+        OutfitDetailDialog(
+            outfit = randomOutfit,
+            onDismiss = { showOutfitDetail = false }
         )
     }
 }

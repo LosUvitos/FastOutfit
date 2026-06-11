@@ -2,6 +2,7 @@ package com.uvitos.fastoutfit.ui.screens
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -26,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.uvitos.fastoutfit.R
 import com.uvitos.fastoutfit.data.database.ClothingItem
 import com.uvitos.fastoutfit.ui.components.AppBackground
+import com.uvitos.fastoutfit.ui.components.GarmentDetailDialog
 import com.uvitos.fastoutfit.ui.components.GarmentPlaceholderCard
 import com.uvitos.fastoutfit.ui.components.TopBarWithHelpHomeProfile
 import com.uvitos.fastoutfit.ui.components.WardrobeTabBar
@@ -50,6 +52,7 @@ fun WardrobeScreen(
     val selectedCategory by clothingViewModel.selectedCategory.collectAsState()
     val visibleGarments by clothingViewModel.visibleGarments.collectAsState()
     var itemToDelete by remember { mutableStateOf<ClothingItem?>(null) }
+    var selectedGarment by remember { mutableStateOf<ClothingItem?>(null) }
 
     AppBackground {
         Column(
@@ -147,6 +150,7 @@ fun WardrobeScreen(
                             garment         = garment,
                             onFavoriteClick = { onFavoriteClick(garment) },
                             onDeleteClick   = { itemToDelete = garment },
+                            onGarmentClick  = { selectedGarment = garment },
                             clothingViewModel
                         )
                     }
@@ -200,6 +204,13 @@ fun WardrobeScreen(
                     )
                 }
             }
+        )
+    }
+
+    if (selectedGarment != null) {
+        GarmentDetailDialog(
+            garment = selectedGarment!!,
+            onDismiss = { selectedGarment = null }
         )
     }
 }
@@ -259,6 +270,7 @@ private fun GarmentCard(
     garment:         ClothingItem,
     onFavoriteClick: () -> Unit,
     onDeleteClick:   () -> Unit,
+    onGarmentClick:  () -> Unit = {},
     clothingViewModel: ClothingViewModel
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -266,7 +278,9 @@ private fun GarmentCard(
         // Placeholder card (se reemplazará con imagen real)
         GarmentPlaceholderCard(
             cardSize = 150.dp,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onGarmentClick),
             imagePath = garment.imagePath
         )
 
