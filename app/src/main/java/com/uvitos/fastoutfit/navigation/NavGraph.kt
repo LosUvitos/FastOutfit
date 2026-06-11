@@ -145,7 +145,6 @@ fun FastOutfitNavGraph() {
                 onSettingsClick = { navController.navigate(Routes.SETTINGS) },
                 onProfileClick = { navController.navigate(Routes.USER) },
                 onShuffleClick = { clothingViewModel.generateRandomOutfit() },
-                onFavoriteClick = { /* TODO: Save outfit to favorites */ },
                 onAddGarmentClick = { navController.navigate(Routes.ADD_ITEM) },
                 onWardrobeClick = { navController.navigate(Routes.WARDROBE) }
             )
