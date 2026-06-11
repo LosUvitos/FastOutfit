@@ -131,6 +131,26 @@ class ClothingViewModel(
         }
     }
 
+    fun saveCurrentOutfitAsFavorite() {
+        val outfit = _randomOutfit.value
+        if (outfit.shirt == null && outfit.pant == null && outfit.upper == null && outfit.shoes == null) return
+        viewModelScope.launch {
+            val favorite = FavoriteOutfit(
+                shirtId = outfit.shirt?.id,
+                pantId = outfit.pant?.id,
+                upperId = outfit.upper?.id,
+                shoesId = outfit.shoes?.id
+            )
+            favoriteOutfitRepository.insert(favorite)
+        }
+    }
+
+    fun deleteFavoriteOutfit(outfit: FavoriteOutfit) {
+        viewModelScope.launch {
+            favoriteOutfitRepository.delete(outfit)
+        }
+    }
+
     // Copies the photo to a permanent location
     private fun saveImageToStorage(context: Context, uri: Uri): String {
         val fileName = "outfit_${System.currentTimeMillis()}.jpg"
